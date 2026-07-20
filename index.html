@@ -1,378 +1,304 @@
-
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="mediaqueries.css" />
-  </head>
-  <body>
-    <nav id="desktop-nav">
-      <div class="logo">Medine Kaynak</div>
-      <div>
-        <ul class="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medine Kaynak</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#0a0a0a',
+                        cardbg: '#171717',
+                        accent: '#3b82f6',
+                        textgray: '#a3a3a3'
+                    },
+                    fontFamily: {
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        // Sayfa yüklendiğinde temayı kontrol et
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.theme = 'dark';
+            } else {
+                localStorage.theme = 'light';
+            }
+        }
+    </script>
+    <style>
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-darkbg dark:text-white font-sans antialiased min-h-screen flex flex-col items-center transition-colors">
+
+    <nav class="w-full max-w-4xl p-6 flex justify-between items-center">
+        <div class="text-xl font-bold tracking-tighter">Medine Kaynak</div>
+        <div class="flex items-center space-x-4 text-sm text-gray-600 dark:text-textgray">
+            <a href="#projects" class="hover:text-black dark:hover:text-white transition">Projects</a>
+            <a href="#experience" class="hover:text-black dark:hover:text-white transition">Experience</a>
+            <a href="#contact" class="hover:text-black dark:hover:text-white transition">Contact</a>
+            <button onclick="toggleTheme()" class="ml-2 p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 transition" aria-label="Toggle Theme">
+                🌓
+            </button>
+        </div>
     </nav>
-    <nav id="hamburger-nav">
-      <div class="logo">Medine Kaynak</div>
-      <div class="hamburger-menu">
-        <div class="hamburger-icon" onclick="toggleMenu()">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="menu-links">
-          <li><a href="#about" onclick="toggleMenu()">About</a></li>
-          <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
-          <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
-          <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
-        </div>
-      </div>
-    </nav>
-    <section id="profile">
-      <div class="section__pic-container">
-        <img src="./assets/profile-pic.jpg" alt="Medine Kaynak profile picture" />
-      </div>
-      <div class="section__text">
-        <p class="section__text__p1">Hello, I'm</p>
-        <h1 class="title">Medine Kaynak</h1>
-        <p class="section__text__p2">Data Scientist And AI Developer</p>
-        <div class="btn-container">
-          <button
-            class="btn btn-color-2"
-            onclick="window.open('./assets/resume-example.pdf')"
-          >
-            Download CV
-          </button>
-          <button class="btn btn-color-1" onclick="location.href='./#contact'">
-            Contact Info
-          </button>
-        </div>
-        <div id="socials-container">
-          <img
-            src="./assets/linkedin.png"
-            alt="My LinkedIn profile"
-            class="icon"
-            onclick="location.href='https://www.linkedin.com/in/medinekaynak2906/'"
-          />
-          <img
-            src="./assets/github.png"
-            alt="My Github profile"
-            class="icon"
-            onclick="location.href='https://github.com/medine1729'"
-          />
-        </div>
-      </div>
-    </section>
-    <section id="about">
-      <p class="section__text__p1">Get To Know More</p>
-      <h1 class="title">About Me</h1>
-      <div class="section-container">
-        <div class="section__pic-container">
-          <img
-            src="./assets/about-pic.jpg"
-            alt="Profile picture"
-            class="about-pic"
-          />
-        </div>
-        <div class="about-details-container">
-          <div class="about-containers">
-            <div class="details-container">
-              <img
-                src="./assets/experience.png"
-                alt="Experience icon"
-                class="icon"
-              />
-              <h3>Experience</h3>
-              <p>Data Secientist and AI Developer</p>
+
+    <header class="w-full max-w-4xl p-6 mt-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div>
+            <div class="mb-6 relative w-32 h-32">
+                <div class="absolute inset-0 bg-blue-500 rounded-full blur opacity-50 animate-pulse"></div>
+                <img src="./assets/profile-pic.jpg" alt="Medine Kaynak profile picture" class="relative w-32 h-32 rounded-full object-cover border-4 border-gray-200 dark:border-white/10 shadow-2xl">
             </div>
-            <div class="details-container">
-              <img
-                src="./assets/education.png"
-                alt="Education icon"
-                class="icon"
-              />
-              <h3>Education</h3>
-              <p>B.Sc. Bachelors Degree</p>
-            </div>
-          </div>
-          <div class="text-container">
-            <p>
-              I am a passionate computer engineering student with a strong interest in AI, machine learning, and data science. My journey in tech has been fueled by curiosity and a deep desire to understand and create innovative solutions. I am excited to continue learning, sharing knowledge, and collaborating with others who share this passion.
+            <h1 class="text-5xl font-extrabold tracking-tight mb-4 text-gray-900 dark:text-white">
+                Just <br> <span class="text-accent">Build.</span>
+            </h1>
+            <p class="text-gray-600 dark:text-textgray text-lg mb-6">
+                Data Scientist &amp; AI Developer
             </p>
-          </div>
+            <div class="flex gap-4">
+                <a href="#contact" class="bg-black text-white dark:bg-white dark:text-black px-6 py-2 rounded-full font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition">Get in Touch</a>
+                <a href="./assets/resume-example.pdf" target="_blank" class="border border-gray-300 dark:border-white/20 px-6 py-2 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-white/10 transition">Download CV</a>
+            </div>
         </div>
-      </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#experience'"
-      />
+
+        <div class="relative group w-full max-w-md mx-auto">
+            <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+
+            <div class="relative bg-white dark:bg-cardbg border border-gray-200 dark:border-white/10 p-6 rounded-xl font-mono text-sm shadow-2xl overflow-hidden transition-colors">
+
+                <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-white/5 pb-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <span class="text-green-600 dark:text-green-500 font-bold tracking-wider text-xs"> Model Training... </span>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-textgray">Epoch #1</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-gray-500 dark:text-textgray block text-xs mb-1">Session ID</span>
+                        <div class="text-blue-600 dark:text-blue-400 text-xs break-all bg-gray-100 dark:bg-black/30 p-2 rounded border border-gray-200 dark:border-white/5">
+                            0x8a3f...c92e </div>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-white/5">
+                        <span class="text-gray-500 dark:text-textgray">Developer</span>
+                        <span class="text-gray-900 dark:text-white font-bold">Medine Kaynak</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-gray-200 dark:border-white/5">
+                        <span class="text-gray-500 dark:text-textgray">Role</span>
+                        <span class="text-purple-600 dark:text-purple-400">Data Scientist &amp; AI Dev</span>
+                    </div>
+                    <div class="pt-2">
+                        <span class="text-gray-500 dark:text-textgray block mb-2">Input Data (Skills)</span>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 rounded text-xs">Python</span>
+                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20 rounded text-xs">Machine Learning</span>
+                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20 rounded text-xs">JavaScript</span>
+                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20 rounded text-xs">PostgreSQL</span>
+                            <span class="px-2 py-1 bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/20 rounded text-xs">Node.js</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-right text-xs text-gray-500 dark:text-textgray">
+                    Timestamp: <span id="time" class="text-gray-900 dark:text-white">Calculating...</span>
+                </div>
+            </div>
+        </div>
+        <script>
+            setInterval(() => {
+                document.getElementById('time').innerText = Math.floor(Date.now() / 1000);
+            }, 1000);
+        </script>
+    </header>
+
+    <section class="w-full max-w-6xl mx-auto p-4 grid grid-cols-2 md:grid-cols-4 gap-4 my-10 border-y border-gray-200 dark:border-white/10 py-12 text-center items-start transition-colors">
+
+        <div class="px-2">
+            <div class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">B.Sc.</div>
+            <div class="text-gray-500 dark:text-textgray text-[10px] md:text-xs uppercase tracking-widest mt-1">Computer Engineering</div>
+        </div>
+
+        <div class="px-2">
+            <div class="text-2xl md:text-3xl font-bold text-accent">+3</div>
+            <div class="text-gray-500 dark:text-textgray text-[10px] md:text-xs uppercase tracking-widest mt-1">Projects</div>
+        </div>
+
+        <div class="px-2">
+            <div class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">+1</div>
+            <div class="text-gray-500 dark:text-textgray text-[10px] md:text-xs uppercase tracking-widest mt-1">Hackathon</div>
+        </div>
+
+        <div class="px-2">
+            <div class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">+10</div>
+            <div class="text-gray-500 dark:text-textgray text-[10px] md:text-xs uppercase tracking-widest mt-1">Technologies</div>
+        </div>
+
     </section>
-    <section id="experience">
-      <p class="section__text__p1">Explore My</p>
-      <h1 class="title">Experience</h1>
-      <div class="experience-details-container">
-        <div class="about-containers">
-          <div class="details-container">
-            <h2 class="experience-sub-title">Data Scientist and AI Developer</h2>
-            <div class="article-container">
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>HTML</h3>
-                  <p>Experienced</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>CSS</h3>
-                  <p>Experienced</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>SASS</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>JavaScript</h3>
-                  <p>Basic</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>TypeScript</h3>
-                  <p>Basic</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Material UI</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-            </div>
-          </div>
-          <div class="details-container">
-            <h2 class="experience-sub-title">Frontend Development</h2>
-            <div class="article-container">
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>PostgreSQL</h3>
-                  <p>Basic</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Node JS</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Express JS</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-              <article>
-                <img
-                  src="./assets/checkmark.png"
-                  alt="Experience icon"
-                  class="icon"
-                />
-                <div>
-                  <h3>Git</h3>
-                  <p>Intermediate</p>
-                </div>
-              </article>
-            </div>
-          </div>
+
+    <section id="about" class="w-full max-w-4xl p-6 my-10">
+        <h2 class="text-2xl font-bold mb-6 pl-2 border-l-4 border-blue-500 text-gray-900 dark:text-white">About Me</h2>
+        <div class="bg-white dark:bg-cardbg p-6 rounded-xl border border-gray-200 dark:border-white/5 transition-colors">
+            <p class="text-gray-600 dark:text-textgray leading-relaxed">
+                I am a passionate computer engineering student with a strong interest in AI, machine learning, and data science.
+                My journey in tech has been fueled by curiosity and a deep desire to understand and create innovative solutions.
+                I am excited to continue learning, sharing knowledge, and collaborating with others who share this passion.
+            </p>
         </div>
-      </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#projects'"
-      />
     </section>
-    <section id="projects">
-      <p class="section__text__p1">Browse My Recent</p>
-      <h1 class="title">Projects</h1>
-      <div class="experience-details-container">
-        <div class="about-containers">
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project-1.png"
-                alt="Project 1"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">trendAI</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/medine1729/trendAI'"
-              >
-                Github
-              </button>
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/medine1729/trendAI'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project-2.png"
-                alt="Project 2"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">Hackathon</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/medine1729/Hepsiburada-Hackathon5'"
-              >
-                Github
-              </button>
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/medine1729/Hepsiburada-Hackathon5'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project-3.png"
-                alt="Project 3"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">Web3 Project</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/medine1729/web3Project"
-              >
-                Github
-              </button>
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/medine1729/web3Project'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
+
+    <section id="projects" class="w-full max-w-4xl p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Selected Projects</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <a href="https://github.com/medine1729/trendAI" target="_blank" class="block bg-white dark:bg-cardbg p-6 rounded-xl border border-gray-200 dark:border-white/5 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/10 transition cursor-pointer group relative hover:-translate-y-1">
+
+                <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition duration-300">
+                    <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </div>
+
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition">trendAI</h3>
+                    <span class="text-xs bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-1 rounded">GitHub</span>
+                </div>
+
+                <p class="text-gray-600 dark:text-textgray text-sm mb-4 pr-4">
+                    An AI-powered project exploring trend analysis and prediction with machine learning.
+                </p>
+
+                <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-textgray font-mono">
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">AI</span>
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">Python</span>
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">Machine Learning</span>
+                </div>
+            </a>
+
+            <a href="https://github.com/medine1729/Hepsiburada-Hackathon5" target="_blank" class="block bg-white dark:bg-cardbg p-6 rounded-xl border border-gray-200 dark:border-white/5 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/10 transition cursor-pointer group relative hover:-translate-y-1">
+
+                <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition duration-300">
+                    <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </div>
+
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition">Hepsiburada Hackathon</h3>
+                    <span class="text-xs bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-1 rounded">Hackathon</span>
+                </div>
+
+                <p class="text-gray-600 dark:text-textgray text-sm mb-4 pr-4">
+                    Project developed for the Hepsiburada Hackathon 5.
+                </p>
+
+                <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-textgray font-mono">
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">Hackathon</span>
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">Team Project</span>
+                </div>
+            </a>
+
+            <a href="https://github.com/medine1729/web3Project" target="_blank" class="block bg-white dark:bg-cardbg p-6 rounded-xl border border-gray-200 dark:border-white/5 hover:border-blue-500/50 hover:shadow-lg hover:shadow-blue-900/10 transition cursor-pointer group relative hover:-translate-y-1">
+
+                <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition duration-300">
+                    <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </div>
+
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition">Web3 Project</h3>
+                    <span class="text-xs bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 px-2 py-1 rounded">GitHub</span>
+                </div>
+
+                <p class="text-gray-600 dark:text-textgray text-sm mb-4 pr-4">
+                    A Web3 project exploring blockchain and decentralized applications.
+                </p>
+
+                <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-textgray font-mono">
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">Web3</span>
+                    <span class="bg-gray-100 dark:bg-white/5 px-2 py-1 rounded group-hover:bg-blue-50 dark:group-hover:bg-blue-500/10 group-hover:text-blue-600 dark:group-hover:text-blue-300 transition">Blockchain</span>
+                </div>
+            </a>
+
         </div>
-      </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#contact'"
-      />
     </section>
-    <section id="contact">
-      <p class="section__text__p1">Get in Touch</p>
-      <h1 class="title">Contact Me</h1>
-      <div class="contact-info-upper-container">
-        <div class="contact-info-container">
-          <img
-            src="./assets/email.png"
-            alt="Email icon"
-            class="icon contact-icon email-icon"
-          />
-          <p><a href="mailto:examplemail@gmail.com">medinekaynak2906@gmail.com</a></p>
+
+    <section id="experience" class="w-full max-w-4xl p-6 my-10">
+        <h2 class="text-2xl font-bold mb-8 pl-2 border-l-4 border-blue-500 text-gray-900 dark:text-white">Experience</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+            <div class="flex gap-4">
+                <div class="w-28 text-gray-500 dark:text-textgray text-sm text-right pt-1 shrink-0">Present</div>
+                <div class="border-l-2 border-blue-500 pl-6 pb-2">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Data Scientist &amp; AI Developer</h3>
+                    <div class="text-blue-600 dark:text-blue-400 text-sm mb-1">Independent Projects</div>
+                    <p class="text-gray-500 dark:text-textgray text-sm">Machine learning, data science and AI-focused development</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="w-28 text-gray-500 dark:text-textgray text-sm text-right pt-1 shrink-0">Present</div>
+                <div class="border-l-2 border-blue-500 pl-6 pb-2">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">B.Sc. Computer Engineering</h3>
+                    <div class="text-blue-600 dark:text-blue-400 text-sm mb-1">University</div>
+                    <p class="text-gray-500 dark:text-textgray text-sm">Bachelor's degree student</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="w-28 text-gray-500 dark:text-textgray text-sm text-right pt-1 shrink-0">Hackathon</div>
+                <div class="border-l-2 border-gray-300 dark:border-white/20 pl-6 pb-2 hover:border-blue-500 transition duration-300">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Hackathon Participant</h3>
+                    <div class="text-blue-600 dark:text-blue-400 text-sm mb-1">Hepsiburada Hackathon 5</div>
+                    <p class="text-gray-500 dark:text-textgray text-sm">Team project development</p>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="w-28 text-gray-500 dark:text-textgray text-sm text-right pt-1 shrink-0">Frontend</div>
+                <div class="border-l-2 border-gray-300 dark:border-white/20 pl-6 pb-2 hover:border-blue-500 transition duration-300">
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-white">Frontend Development</h3>
+                    <div class="text-blue-600 dark:text-blue-400 text-sm mb-1">HTML, CSS, JavaScript, TypeScript</div>
+                    <p class="text-gray-500 dark:text-textgray text-sm">Node.js, Express.js, PostgreSQL, Material UI, Git</p>
+                </div>
+            </div>
+
         </div>
-        <div class="contact-info-container">
-          <img
-            src="./assets/linkedin.png"
-            alt="LinkedIn icon"
-            class="icon contact-icon"
-          />
-          <p><a href="https://www.linkedin.com/in/medinekaynak2906/">LinkedIn</a></p>
-        </div>
-      </div>
     </section>
-    <footer>
-      <nav>
-        <div class="nav-links-container">
-          <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
+
+    <footer id="contact" class="w-full max-w-4xl p-6 mt-10 mb-20 text-center">
+        <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">Build Together</h2>
+        <p class="text-gray-600 dark:text-textgray mb-2">
+            <a href="mailto:medinekaynak2906@gmail.com" class="hover:text-black dark:hover:text-white transition">medinekaynak2906@gmail.com</a>
+        </p>
+        <div class="flex justify-center gap-6 mt-8">
+
+            <a href="https://www.linkedin.com/in/medinekaynak2906/" target="_blank" class="group p-3 bg-gray-200 dark:bg-white/5 rounded-full border border-gray-300 dark:border-white/10 hover:bg-[#0077b5] hover:text-white dark:hover:border-[#0077b5] transition duration-300">
+                <svg class="w-6 h-6 fill-current text-gray-800 dark:text-white group-hover:text-white" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+
+            <a href="https://github.com/medine1729" target="_blank" class="group p-3 bg-gray-200 dark:bg-white/5 rounded-full border border-gray-300 dark:border-white/10 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition duration-300">
+                <svg class="w-6 h-6 fill-current text-gray-800 dark:text-white group-hover:text-white dark:group-hover:text-black" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+
         </div>
-      </nav>
-      <p>Copyright &#169; 2023 Medine Kaynak. All Rights Reserved.</p>
+        <div class="mt-8 text-gray-500 dark:text-textgray text-sm">
+            © 2026 Medine Kaynak. All rights reserved.
+        </div>
     </footer>
-    <script src="script.js"></script>
-  </body>
+
+</body>
 </html>
