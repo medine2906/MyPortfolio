@@ -11,15 +11,16 @@
             theme: {
                 extend: {
                     colors: {
-                        darkbg: '#0f0f23',
-                        cardbg: '#1a1a2e',
-                        accent: '#29adff',
-                        pixgreen: '#00e436',
-                        pixpink: '#ff77a8',
-                        pixyellow: '#ffec27',
-                        pixorange: '#ffa300',
-                        pixred: '#ff004d',
-                        textgray: '#a3a3b5'
+                        daybg: '#f0dcae',
+                        nightbg: '#232a45',
+                        panel: '#fff5de',
+                        panelgold: '#e9b97e',
+                        wood: '#8a4a21',
+                        wooddark: '#5b2c0f',
+                        svorange: '#e86a17',
+                        svgreen: '#3e9d4a',
+                        svblue: '#29adff',
+                        svpink: '#ff4da6'
                     },
                     fontFamily: {
                         pixel: ['"Press Start 2P"', 'monospace'],
@@ -36,431 +37,331 @@
         } else {
             document.documentElement.classList.remove('dark')
         }
-
         function toggleTheme() {
             document.documentElement.classList.toggle('dark');
-            if (document.documentElement.classList.contains('dark')) {
-                localStorage.theme = 'dark';
-            } else {
-                localStorage.theme = 'light';
-            }
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        }
+        function toggleProj(card) {
+            card.classList.toggle('open');
         }
     </script>
     <style>
         @font-face {
             font-family: 'Press Start 2P';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
+            font-style: normal; font-weight: 400; font-display: swap;
             src: url('./assets/fonts/press-start-2p-latin-400-normal.woff2') format('woff2');
             unicode-range: U+0000-00FF, U+0131, U+2000-206F, U+20AC, U+2212, U+2215;
         }
         @font-face {
             font-family: 'Press Start 2P';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
+            font-style: normal; font-weight: 400; font-display: swap;
             src: url('./assets/fonts/press-start-2p-latin-ext-400-normal.woff2') format('woff2');
             unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
         }
         @font-face {
             font-family: 'VT323';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
+            font-style: normal; font-weight: 400; font-display: swap;
             src: url('./assets/fonts/vt323-latin-400-normal.woff2') format('woff2');
             unicode-range: U+0000-00FF, U+0131, U+2000-206F, U+20AC, U+2212, U+2215;
         }
         @font-face {
             font-family: 'VT323';
-            font-style: normal;
-            font-weight: 400;
-            font-display: swap;
+            font-style: normal; font-weight: 400; font-display: swap;
             src: url('./assets/fonts/vt323-latin-ext-400-normal.woff2') format('woff2');
             unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
         }
 
         body {
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.3s ease;
             font-family: 'VT323', monospace;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             line-height: 1.4;
-            image-rendering: pixelated;
         }
-        /* CRT scanlines */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 50;
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.06) 0px, rgba(0,0,0,0.06) 1px, transparent 1px, transparent 3px);
+        /* Stardew wooden/parchment panel */
+        .sv-panel {
+            background: #fff5de;
+            border: 4px solid #8a4a21;
+            border-radius: 10px;
+            box-shadow: inset 0 0 0 4px #e9b97e, 5px 5px 0 rgba(43,29,20,0.3);
+            color: #5b2c0f;
         }
-        .dark body::before {
-            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 3px);
+        .sv-sign {
+            background: #a05a2c;
+            border: 4px solid #5b2c0f;
+            border-radius: 8px;
+            box-shadow: inset 0 0 0 3px #c8873e, 4px 4px 0 rgba(43,29,20,0.35);
+            color: #fff5de;
         }
-        .pixel-border {
-            border: 3px solid #111;
-            box-shadow: 5px 5px 0 #111;
-            border-radius: 0;
+        .sv-btn {
+            background: #fff5de;
+            border: 4px solid #8a4a21;
+            border-radius: 8px;
+            box-shadow: inset 0 0 0 3px #e9b97e, 4px 4px 0 rgba(43,29,20,0.3);
+            color: #5b2c0f;
+            transition: transform 0.06s, box-shadow 0.06s;
         }
-        .dark .pixel-border {
-            border-color: #e5e5f0;
-            box-shadow: 5px 5px 0 rgba(229,229,240,0.9);
-        }
-        .pixel-border-flat {
-            border: 3px solid #111;
-            border-radius: 0;
-        }
-        .dark .pixel-border-flat { border-color: #e5e5f0; }
-        .pixel-btn {
-            border: 3px solid #111;
-            box-shadow: 4px 4px 0 #111;
-            border-radius: 0;
-            transition: transform 0.05s, box-shadow 0.05s;
-        }
-        .dark .pixel-btn { border-color: #e5e5f0; box-shadow: 4px 4px 0 rgba(229,229,240,0.9); }
-        .pixel-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #111; }
-        .dark .pixel-btn:hover { box-shadow: 2px 2px 0 rgba(229,229,240,0.9); }
-        .pixel-card { transition: transform 0.08s, box-shadow 0.08s; }
-        .pixel-card:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 #111; }
-        .dark .pixel-card:hover { box-shadow: 8px 8px 0 rgba(229,229,240,0.9); }
+        .sv-btn:hover { transform: translate(2px,2px); box-shadow: inset 0 0 0 3px #e9b97e, 2px 2px 0 rgba(43,29,20,0.3); }
+        .sv-btn-orange { background: #e86a17; color: #fff5de; box-shadow: inset 0 0 0 3px #ffb570, 4px 4px 0 rgba(43,29,20,0.3); }
+        .sv-btn-orange:hover { box-shadow: inset 0 0 0 3px #ffb570, 2px 2px 0 rgba(43,29,20,0.3); }
         .pixelated-img { image-rendering: pixelated; }
         .blink { animation: blink 1s steps(1) infinite; }
         @keyframes blink { 50% { opacity: 0; } }
-        .hp-bar { height: 14px; }
-        .hp-fill { height: 100%; }
+        /* energy/skill bar */
+        .sv-bar { height: 16px; background: #d9c49a; border: 3px solid #5b2c0f; border-radius: 6px; overflow: hidden; }
+        .sv-fill { height: 100%; }
+        /* project cards: click to open description */
+        .proj { cursor: pointer; transition: transform 0.08s; }
+        .proj:hover { transform: translate(-2px,-2px); }
+        .proj .proj-desc { display: none; }
+        .proj.open .proj-desc { display: block; }
+        .proj .proj-hint { display: block; }
+        .proj.open .proj-hint { display: none; }
     </style>
 </head>
-<body class="bg-[#fdf3e7] text-gray-900 dark:bg-darkbg dark:text-white antialiased min-h-screen flex flex-col items-center transition-colors">
+<body class="bg-daybg dark:bg-nightbg antialiased min-h-screen flex flex-col items-center transition-colors text-wooddark dark:text-panel">
 
-    <nav class="w-full max-w-4xl p-6 flex justify-between items-center flex-wrap gap-3">
-        <div class="font-pixel text-sm md:text-base">MEDINE.EXE</div>
-        <div class="flex items-center gap-3 text-xl text-gray-700 dark:text-textgray">
-            <a href="#projects" class="hover:text-black dark:hover:text-white transition">[Projects]</a>
-            <a href="#experience" class="hover:text-black dark:hover:text-white transition">[Quests]</a>
-            <a href="#contact" class="hover:text-black dark:hover:text-white transition">[Contact]</a>
-            <button onclick="toggleTheme()" class="pixel-btn px-2 py-1 bg-white dark:bg-cardbg text-sm" aria-label="Toggle Theme">
-                🌓
-            </button>
+    <nav class="w-full max-w-5xl px-6 py-8 flex justify-between items-center flex-wrap gap-4">
+        <div class="font-pixel text-xs md:text-sm">MEDINE KAYNAK</div>
+        <div class="flex items-center gap-4 text-2xl">
+            <a href="#projects" class="hover:text-svorange transition">Projects</a>
+            <a href="#experience" class="hover:text-svorange transition">Quests</a>
+            <a href="#contact" class="hover:text-svorange transition">Contact</a>
+            <button onclick="toggleTheme()" class="sv-btn px-3 py-1 text-lg" aria-label="Toggle Theme">☀/🌙</button>
         </div>
     </nav>
 
-    <header class="w-full max-w-4xl p-6 mt-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <div>
-            <div class="mb-8 relative w-32 h-32">
-                <img src="./assets/profile-pic.jpg" alt="Medine Kaynak profile picture" class="pixelated-img pixel-border relative w-32 h-32 object-cover bg-white">
-                <div class="absolute -bottom-3 -right-3 bg-pixgreen text-black font-pixel text-[8px] px-2 py-1 pixel-border-flat">LV.21</div>
-            </div>
-            <h1 class="font-pixel text-2xl md:text-3xl leading-relaxed mb-6 text-gray-900 dark:text-white">
-                JUST<br><span class="text-accent">BUILD.</span><span class="blink">_</span>
-            </h1>
-            <p class="text-gray-700 dark:text-textgray text-2xl mb-8">
-                &gt; Data Scientist &amp; AI Developer
-            </p>
-            <div class="flex gap-5 flex-wrap">
-                <a href="#contact" class="pixel-btn bg-pixyellow text-black px-5 py-2 font-pixel text-[10px]">▶ GET IN TOUCH</a>
-                <a href="./assets/resume-example.pdf" target="_blank" class="pixel-btn bg-white dark:bg-cardbg text-gray-900 dark:text-white px-5 py-2 font-pixel text-[10px]">↓ DOWNLOAD CV</a>
-            </div>
+    <header class="w-full max-w-5xl px-6 mt-8 mb-20 text-center flex flex-col items-center">
+        <div class="sv-panel p-3 inline-block mb-8">
+            <img src="./assets/profile-pic.jpg" alt="Medine Kaynak profile picture" class="pixelated-img w-36 h-36 object-cover rounded-md border-[3px] border-wooddark">
         </div>
-
-        <div class="w-full max-w-md mx-auto">
-            <div class="pixel-border bg-white dark:bg-cardbg overflow-hidden">
-
-                <div class="bg-accent text-black dark:text-black font-pixel text-[9px] px-4 py-2 flex justify-between items-center border-b-[3px] border-[#111] dark:border-[#e5e5f0]">
-                    <span>◼ PLAYER STATS</span>
-                    <span>EPOCH #1</span>
-                </div>
-
-                <div class="p-5 space-y-4">
-                    <div class="flex items-center gap-2">
-                        <div class="w-3 h-3 bg-pixgreen"></div>
-                        <span class="text-pixgreen text-xl">MODEL TRAINING...</span>
-                    </div>
-
-                    <div class="flex justify-between items-center border-b-2 border-dashed border-gray-300 dark:border-white/20 pb-2">
-                        <span class="text-gray-500 dark:text-textgray text-xl">PLAYER</span>
-                        <span class="font-pixel text-[10px]">MEDINE KAYNAK</span>
-                    </div>
-                    <div class="flex justify-between items-center border-b-2 border-dashed border-gray-300 dark:border-white/20 pb-2">
-                        <span class="text-gray-500 dark:text-textgray text-xl">CLASS</span>
-                        <span class="text-pixpink text-xl">DATA SCIENTIST / AI DEV</span>
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between text-xl mb-1"><span class="text-gray-500 dark:text-textgray">PYTHON</span><span class="text-pixgreen">92/100</span></div>
-                        <div class="hp-bar pixel-border-flat bg-gray-200 dark:bg-black/40"><div class="hp-fill bg-pixgreen" style="width:92%"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-xl mb-1"><span class="text-gray-500 dark:text-textgray">MACHINE LEARNING</span><span class="text-pixyellow">85/100</span></div>
-                        <div class="hp-bar pixel-border-flat bg-gray-200 dark:bg-black/40"><div class="hp-fill bg-pixyellow" style="width:85%"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-xl mb-1"><span class="text-gray-500 dark:text-textgray">SQL / DATABASES</span><span class="text-pixorange">80/100</span></div>
-                        <div class="hp-bar pixel-border-flat bg-gray-200 dark:bg-black/40"><div class="hp-fill bg-pixorange" style="width:80%"></div></div>
-                    </div>
-                    <div>
-                        <div class="flex justify-between text-xl mb-1"><span class="text-gray-500 dark:text-textgray">C++ / EMBEDDED</span><span class="text-pixpink">70/100</span></div>
-                        <div class="hp-bar pixel-border-flat bg-gray-200 dark:bg-black/40"><div class="hp-fill bg-pixpink" style="width:70%"></div></div>
-                    </div>
-
-                    <div class="pt-1">
-                        <span class="text-gray-500 dark:text-textgray block mb-2 text-xl">INVENTORY</span>
-                        <div class="flex flex-wrap gap-2 text-lg">
-                            <span class="pixel-border-flat px-2 bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-accent">TensorFlow</span>
-                            <span class="pixel-border-flat px-2 bg-purple-100 dark:bg-purple-500/10 text-purple-700 dark:text-pixpink">Deep Learning</span>
-                            <span class="pixel-border-flat px-2 bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-pixgreen">Data Analysis</span>
-                            <span class="pixel-border-flat px-2 bg-yellow-100 dark:bg-yellow-500/10 text-yellow-700 dark:text-pixyellow">Linux</span>
-                        </div>
-                    </div>
-
-                    <div class="text-right text-lg text-gray-500 dark:text-textgray">
-                        TIME: <span id="time" class="text-gray-900 dark:text-white">...</span>
-                    </div>
-                </div>
-            </div>
+        <h1 class="font-pixel text-xl md:text-3xl leading-relaxed mb-5">
+            JUST <span class="text-svorange">BUILD.</span><span class="blink">_</span>
+        </h1>
+        <p class="text-3xl mb-3 opacity-90">Data Scientist &amp; AI Developer</p>
+        <p class="text-2xl opacity-70 max-w-2xl mb-10">
+            Computer Engineering student growing machine learning models, data pipelines and AI projects — one season at a time.
+        </p>
+        <div class="flex gap-6 flex-wrap justify-center">
+            <a href="#contact" class="sv-btn sv-btn-orange px-6 py-2 font-pixel text-[10px]">GET IN TOUCH</a>
+            <a href="./assets/resume-example.pdf" target="_blank" class="sv-btn px-6 py-2 font-pixel text-[10px]">DOWNLOAD CV</a>
         </div>
-        <script>
-            setInterval(() => {
-                document.getElementById('time').innerText = Math.floor(Date.now() / 1000);
-            }, 1000);
-        </script>
     </header>
 
-    <section class="w-full max-w-4xl mx-auto px-6 my-12">
-        <div class="pixel-border bg-white dark:bg-cardbg grid grid-cols-2 md:grid-cols-4 text-center divide-x-[3px] divide-y-[3px] md:divide-y-0 divide-[#111] dark:divide-[#e5e5f0]">
-            <div class="p-5">
-                <div class="font-pixel text-lg md:text-xl text-accent">3.68</div>
-                <div class="text-gray-500 dark:text-textgray text-lg mt-2 uppercase">GPA</div>
+    <section class="w-full max-w-5xl px-6 mb-20">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div class="sv-panel py-5 px-3">
+                <div class="font-pixel text-sm text-svorange mb-2">3.68</div>
+                <div class="text-xl opacity-80">GPA</div>
             </div>
-            <div class="p-5">
-                <div class="font-pixel text-lg md:text-xl text-pixgreen">+5</div>
-                <div class="text-gray-500 dark:text-textgray text-lg mt-2 uppercase">Projects</div>
+            <div class="sv-panel py-5 px-3">
+                <div class="font-pixel text-sm text-svgreen mb-2">+5</div>
+                <div class="text-xl opacity-80">Projects</div>
             </div>
-            <div class="p-5">
-                <div class="font-pixel text-lg md:text-xl text-pixyellow">+4</div>
-                <div class="text-gray-500 dark:text-textgray text-lg mt-2 uppercase">Internships</div>
+            <div class="sv-panel py-5 px-3">
+                <div class="font-pixel text-sm text-svblue mb-2">+4</div>
+                <div class="text-xl opacity-80">Internships</div>
             </div>
-            <div class="p-5">
-                <div class="font-pixel text-lg md:text-xl text-pixpink">25K+</div>
-                <div class="text-gray-500 dark:text-textgray text-lg mt-2 uppercase">Records Mined</div>
+            <div class="sv-panel py-5 px-3">
+                <div class="font-pixel text-sm text-svpink mb-2">25K+</div>
+                <div class="text-xl opacity-80">Records Mined</div>
             </div>
         </div>
     </section>
 
-    <section id="about" class="w-full max-w-4xl p-6 my-6">
-        <h2 class="font-pixel text-sm md:text-base mb-6 text-gray-900 dark:text-white">■ ABOUT ME</h2>
-        <div class="pixel-border bg-white dark:bg-cardbg p-6">
-            <p class="text-gray-700 dark:text-textgray text-2xl leading-snug">
-                Computer Engineering student specializing in Data Science, Machine Learning, and Artificial
-                Intelligence. Experienced in Python-based data analysis, large-scale web scraping, machine
-                learning models, and database-driven systems. Actively involved in AI research projects,
-                open-source development, and interdisciplinary engineering teams.
+    <section class="w-full max-w-5xl px-6 mb-20">
+        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-8">SKILLS</div>
+        <div class="sv-panel p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+            <div>
+                <div class="flex justify-between text-2xl mb-1"><span>Python</span><span class="text-svgreen">Lv. 9</span></div>
+                <div class="sv-bar"><div class="sv-fill bg-svgreen" style="width:92%"></div></div>
+            </div>
+            <div>
+                <div class="flex justify-between text-2xl mb-1"><span>Machine Learning</span><span class="text-svorange">Lv. 8</span></div>
+                <div class="sv-bar"><div class="sv-fill bg-svorange" style="width:85%"></div></div>
+            </div>
+            <div>
+                <div class="flex justify-between text-2xl mb-1"><span>SQL &amp; Databases</span><span class="text-svblue">Lv. 8</span></div>
+                <div class="sv-bar"><div class="sv-fill bg-svblue" style="width:80%"></div></div>
+            </div>
+            <div>
+                <div class="flex justify-between text-2xl mb-1"><span>C++ &amp; Embedded</span><span class="text-svpink">Lv. 7</span></div>
+                <div class="sv-bar"><div class="sv-fill bg-svpink" style="width:70%"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="w-full max-w-5xl px-6 mb-20">
+        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-3">PROJECTS</div>
+        <p class="text-xl opacity-70 mb-8">Click a project to read about it.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
+                <img src="./assets/proj-trendai.png" alt="trendAI pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-pixel text-[10px]">trendAI</h3>
+                    <span class="text-lg text-svorange">★ BTK Hackathon</span>
+                </div>
+                <span class="proj-hint text-lg opacity-60">▼ click</span>
+                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
+                    <p class="text-xl mb-3">An AI recommendation system that analyzes e-commerce product trends with TensorFlow.</p>
+                    <a href="https://github.com/hackathonBTK2025/trendyAI" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
+                <img src="./assets/proj-chargemind.png" alt="ChargeMind pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-pixel text-[10px]">ChargeMind</h3>
+                    <span class="text-lg text-svgreen">2025 ~</span>
+                </div>
+                <span class="proj-hint text-lg opacity-60">▼ click</span>
+                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
+                    <p class="text-xl mb-3">An AI system that predicts usage patterns to optimize energy consumption and charging.</p>
+                    <a href="https://github.com/medine1729" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
+                <img src="./assets/proj-astrolis.png" alt="Astrolis pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-pixel text-[10px]">Astrolis</h3>
+                    <span class="text-lg text-svblue">Model Satellite</span>
+                </div>
+                <span class="proj-hint text-lg opacity-60">▼ click</span>
+                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
+                    <p class="text-xl mb-3">A Category-1 model satellite built with C++, Arduino and Raspberry Pi subsystems.</p>
+                </div>
+            </div>
+
+            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
+                <img src="./assets/proj-hepsiburada.png" alt="Hepsiburada Hackathon pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-pixel text-[10px]">Hepsiburada</h3>
+                    <span class="text-lg text-svorange">⚔ Hackathon</span>
+                </div>
+                <span class="proj-hint text-lg opacity-60">▼ click</span>
+                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
+                    <p class="text-xl mb-3">A team project built during Hepsiburada Hackathon 5.</p>
+                    <a href="https://github.com/medine1729/Hepsiburada-Hackathon5" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
+                </div>
+            </div>
+
+            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
+                <img src="./assets/proj-web3.png" alt="Web3 project pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-pixel text-[10px]">Web3 Project</h3>
+                    <span class="text-lg text-svpink">⛓ Chain</span>
+                </div>
+                <span class="proj-hint text-lg opacity-60">▼ click</span>
+                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
+                    <p class="text-xl mb-3">Experiments with blockchain and decentralized applications.</p>
+                    <a href="https://github.com/medine1729/web3Project" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="experience" class="w-full max-w-5xl px-6 mb-20">
+        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-8">QUEST LOG</div>
+
+        <div class="space-y-6">
+
+            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="font-pixel text-[10px] block mb-1">B.Sc. Computer Engineering</span>
+                    <span class="text-xl opacity-80">Muğla Sıtkı Koçman University · GPA 3.68 · 2023-2028</span>
+                </div>
+                <span class="text-2xl text-svgreen">▶ Active</span>
+            </div>
+
+            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="font-pixel text-[10px] block mb-1">Deneyap Mentor</span>
+                    <span class="text-xl opacity-80">Deneyap Türkiye · coding &amp; electronics workshops · 2024-2025</span>
+                </div>
+                <span class="text-2xl text-svorange">✔ Done</span>
+            </div>
+
+            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="font-pixel text-[10px] block mb-1">IT Intern</span>
+                    <span class="text-xl opacity-80">TNC Group · Python, Excel, AutoCAD, Photoshop · 2025</span>
+                </div>
+                <span class="text-2xl text-svorange">✔ Done</span>
+            </div>
+
+            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="font-pixel text-[10px] block mb-1">Data Mining Intern</span>
+                    <span class="text-xl opacity-80">CoCRM · scraped &amp; structured 25,000+ company records · 2024</span>
+                </div>
+                <span class="text-2xl text-svorange">✔ Done</span>
+            </div>
+
+            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="font-pixel text-[10px] block mb-1">Denizaşırı Online Intern</span>
+                    <span class="text-xl opacity-80">DenizBank · banking &amp; finance fundamentals · 2024</span>
+                </div>
+                <span class="text-2xl text-svorange">✔ Done</span>
+            </div>
+
+            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
+                <div>
+                    <span class="font-pixel text-[10px] block mb-1">Satellite Team Member</span>
+                    <span class="text-xl opacity-80">Astrolis · electronics &amp; software subsystems · 2024-2025</span>
+                </div>
+                <span class="text-2xl text-svorange">✔ Done</span>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="social" class="w-full max-w-5xl px-6 mb-20">
+        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-8">BULLETIN BOARD</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+            <a href="https://www.linkedin.com/in/medinekaynak2906/recent-activity/all/" target="_blank" class="sv-panel proj p-6 block">
+                <h3 class="font-pixel text-[10px] mb-3 text-[#0077b5]">in · LinkedIn Posts</h3>
+                <p class="text-xl opacity-80">Hackathons, projects and everything I share along the way.</p>
+            </a>
+
+            <a href="https://medium.com/@medinekaynak" target="_blank" class="sv-panel proj p-6 block">
+                <h3 class="font-pixel text-[10px] mb-3">M · Medium Articles</h3>
+                <p class="text-xl opacity-80">Writing on data science, machine learning and my journey.</p>
+            </a>
+
+        </div>
+    </section>
+
+    <footer id="contact" class="w-full max-w-5xl px-6 mb-24 text-center">
+        <div class="sv-panel inline-block px-10 py-8">
+            <h2 class="font-pixel text-sm md:text-base mb-5">BUILD TOGETHER<span class="blink">_</span></h2>
+            <p class="text-2xl mb-6">
+                <a href="mailto:medinekaynak2906@gmail.com" class="underline decoration-dotted underline-offset-4 hover:text-svorange transition">medinekaynak2906@gmail.com</a>
             </p>
+            <div class="flex justify-center gap-5">
+                <a href="https://www.linkedin.com/in/medinekaynak2906/" target="_blank" class="sv-btn p-3" aria-label="LinkedIn">
+                    <svg class="w-6 h-6 fill-current text-[#0077b5]" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+                <a href="https://github.com/medine1729" target="_blank" class="sv-btn p-3" aria-label="GitHub">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>
+                <a href="https://medium.com/@medinekaynak" target="_blank" class="sv-btn p-3" aria-label="Medium">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
-    </section>
-
-    <section id="projects" class="w-full max-w-4xl p-6 my-6">
-        <h2 class="font-pixel text-sm md:text-base mb-6 text-gray-900 dark:text-white">■ SELECTED PROJECTS</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <a href="https://github.com/hackathonBTK2025/trendyAI" target="_blank" class="pixel-border pixel-card block bg-white dark:bg-cardbg">
-                <div class="bg-pixgreen text-black font-pixel text-[9px] px-4 py-2 flex justify-between items-center border-b-[3px] border-[#111] dark:border-[#e5e5f0]">
-                    <span>trendAI</span><span>★ BTK</span>
-                </div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl mb-4">
-                        AI-powered recommendation system analyzing e-commerce product trends, with ML models in Python/TensorFlow and a PostgreSQL-backed backend.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-lg">
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Python</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">TensorFlow</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">PostgreSQL</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/medine1729" target="_blank" class="pixel-border pixel-card block bg-white dark:bg-cardbg">
-                <div class="bg-pixyellow text-black font-pixel text-[9px] px-4 py-2 flex justify-between items-center border-b-[3px] border-[#111] dark:border-[#e5e5f0]">
-                    <span>ChargeMind</span><span>2025~</span>
-                </div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl mb-4">
-                        AI-driven system for intelligent energy consumption and charging optimization — predicting usage patterns with data analysis and machine learning.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-lg">
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Python</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Machine Learning</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Data Pipelines</span>
-                    </div>
-                </div>
-            </a>
-
-            <div class="pixel-border pixel-card block bg-white dark:bg-cardbg">
-                <div class="bg-pixpink text-black font-pixel text-[9px] px-4 py-2 flex justify-between items-center border-b-[3px] border-[#111] dark:border-[#e5e5f0]">
-                    <span>Astrolis</span><span>🛰 SAT</span>
-                </div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl mb-4">
-                        Category-1 model satellite: electronics, communication and software subsystems, plus system integration and inter-subsystem data communication.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-lg">
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">C++</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Arduino</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Raspberry Pi</span>
-                    </div>
-                </div>
-            </div>
-
-            <a href="https://github.com/medine1729/Hepsiburada-Hackathon5" target="_blank" class="pixel-border pixel-card block bg-white dark:bg-cardbg">
-                <div class="bg-pixorange text-black font-pixel text-[9px] px-4 py-2 flex justify-between items-center border-b-[3px] border-[#111] dark:border-[#e5e5f0]">
-                    <span>Hepsiburada</span><span>⚔ HACK</span>
-                </div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl mb-4">
-                        Project developed for the Hepsiburada Hackathon 5 — team-based rapid prototyping.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-lg">
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Hackathon</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Team Project</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://github.com/medine1729/web3Project" target="_blank" class="pixel-border pixel-card block bg-white dark:bg-cardbg md:col-span-2">
-                <div class="bg-accent text-black font-pixel text-[9px] px-4 py-2 flex justify-between items-center border-b-[3px] border-[#111] dark:border-[#e5e5f0]">
-                    <span>Web3 Project</span><span>⛓ CHAIN</span>
-                </div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl mb-4">
-                        A Web3 project exploring blockchain and decentralized applications.
-                    </p>
-                    <div class="flex flex-wrap gap-2 text-lg">
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Web3</span>
-                        <span class="pixel-border-flat px-2 bg-gray-100 dark:bg-white/5">Blockchain</span>
-                    </div>
-                </div>
-            </a>
-
-        </div>
-    </section>
-
-    <section id="social" class="w-full max-w-4xl p-6 my-6">
-        <h2 class="font-pixel text-sm md:text-base mb-6 text-gray-900 dark:text-white">■ POSTS &amp; WRITING</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <a href="https://www.linkedin.com/in/medinekaynak2906/recent-activity/all/" target="_blank" class="pixel-border pixel-card block bg-white dark:bg-cardbg">
-                <div class="bg-[#0077b5] text-white font-pixel text-[9px] px-4 py-2 border-b-[3px] border-[#111] dark:border-[#e5e5f0]">in LINKEDIN POSTS</div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl">
-                        Hackathons, projects and everything I share along the way — follow my journey on LinkedIn. <span class="text-accent">&gt;&gt;</span>
-                    </p>
-                </div>
-            </a>
-
-            <a href="https://medium.com/@medinekaynak" target="_blank" class="pixel-border pixel-card block bg-white dark:bg-cardbg">
-                <div class="bg-gray-900 text-white dark:bg-white dark:text-black font-pixel text-[9px] px-4 py-2 border-b-[3px] border-[#111] dark:border-[#e5e5f0]">M MEDIUM ARTICLES</div>
-                <div class="p-5">
-                    <p class="text-gray-700 dark:text-textgray text-xl">
-                        Articles on data science, machine learning and my engineering journey. <span class="text-accent">&gt;&gt;</span>
-                    </p>
-                </div>
-            </a>
-
-        </div>
-    </section>
-
-    <section id="experience" class="w-full max-w-4xl p-6 my-6">
-        <h2 class="font-pixel text-sm md:text-base mb-6 text-gray-900 dark:text-white">■ QUEST LOG <span class="text-gray-500 dark:text-textgray">(EXPERIENCE)</span></h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <div class="pixel-border bg-white dark:bg-cardbg p-5">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-pixel text-[10px] leading-relaxed">B.SC. COMPUTER ENGINEERING</h3>
-                    <span class="text-pixgreen text-lg whitespace-nowrap ml-2">▶ ACTIVE</span>
-                </div>
-                <div class="text-accent text-xl mb-1">Muğla Sıtkı Koçman University · 2023-2028</div>
-                <p class="text-gray-600 dark:text-textgray text-xl">GPA: 3.68</p>
-            </div>
-
-            <div class="pixel-border bg-white dark:bg-cardbg p-5">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-pixel text-[10px] leading-relaxed">DENEYAP MENTOR</h3>
-                    <span class="text-pixyellow text-lg whitespace-nowrap ml-2">✔ DONE</span>
-                </div>
-                <div class="text-accent text-xl mb-1">Deneyap Türkiye · 2024-2025</div>
-                <p class="text-gray-600 dark:text-textgray text-xl">Mentoring students in coding, electronics and problem-solving within technology workshops</p>
-            </div>
-
-            <div class="pixel-border bg-white dark:bg-cardbg p-5">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-pixel text-[10px] leading-relaxed">IT INTERN</h3>
-                    <span class="text-pixyellow text-lg whitespace-nowrap ml-2">✔ DONE</span>
-                </div>
-                <div class="text-accent text-xl mb-1">TNC Group · 2025</div>
-                <p class="text-gray-600 dark:text-textgray text-xl">Practical training in Python, Excel, AutoCAD and Photoshop; project documentation</p>
-            </div>
-
-            <div class="pixel-border bg-white dark:bg-cardbg p-5">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-pixel text-[10px] leading-relaxed">DATA MINING INTERN</h3>
-                    <span class="text-pixyellow text-lg whitespace-nowrap ml-2">✔ DONE</span>
-                </div>
-                <div class="text-accent text-xl mb-1">CoCRM · 2024</div>
-                <p class="text-gray-600 dark:text-textgray text-xl">Python web scraping pipelines extracting and structuring 25,000+ company records</p>
-            </div>
-
-            <div class="pixel-border bg-white dark:bg-cardbg p-5">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-pixel text-[10px] leading-relaxed">DENIZAŞIRI ONLINE INTERN</h3>
-                    <span class="text-pixyellow text-lg whitespace-nowrap ml-2">✔ DONE</span>
-                </div>
-                <div class="text-accent text-xl mb-1">DenizBank · 2024</div>
-                <p class="text-gray-600 dark:text-textgray text-xl">Banking and finance fundamentals, completed with certificate</p>
-            </div>
-
-            <div class="pixel-border bg-white dark:bg-cardbg p-5">
-                <div class="flex justify-between items-start mb-1">
-                    <h3 class="font-pixel text-[10px] leading-relaxed">SATELLITE TEAM MEMBER</h3>
-                    <span class="text-pixyellow text-lg whitespace-nowrap ml-2">✔ DONE</span>
-                </div>
-                <div class="text-accent text-xl mb-1">Astrolis · 2024-2025</div>
-                <p class="text-gray-600 dark:text-textgray text-xl">Electronics, communication and software subsystems of a Category-1 model satellite</p>
-            </div>
-
-        </div>
-    </section>
-
-    <footer id="contact" class="w-full max-w-4xl p-6 mt-10 mb-20 text-center">
-        <h2 class="font-pixel text-base md:text-lg mb-6 text-gray-900 dark:text-white">▶ BUILD TOGETHER<span class="blink">_</span></h2>
-        <p class="text-2xl mb-2">
-            <a href="mailto:medinekaynak2906@gmail.com" class="text-gray-700 dark:text-textgray hover:text-black dark:hover:text-white transition underline decoration-dotted underline-offset-4">medinekaynak2906@gmail.com</a>
-        </p>
-        <div class="flex justify-center gap-6 mt-8">
-
-            <a href="https://www.linkedin.com/in/medinekaynak2906/" target="_blank" class="pixel-btn p-3 bg-white dark:bg-cardbg" aria-label="LinkedIn">
-                <svg class="w-6 h-6 fill-current text-[#0077b5]" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
-                </svg>
-            </a>
-
-            <a href="https://github.com/medine1729" target="_blank" class="pixel-btn p-3 bg-white dark:bg-cardbg" aria-label="GitHub">
-                <svg class="w-6 h-6 fill-current text-gray-900 dark:text-white" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
-                </svg>
-            </a>
-
-            <a href="https://medium.com/@medinekaynak" target="_blank" class="pixel-btn p-3 bg-white dark:bg-cardbg" aria-label="Medium">
-                <svg class="w-6 h-6 fill-current text-gray-900 dark:text-white" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
-                </svg>
-            </a>
-
-        </div>
-        <div class="mt-10 text-gray-500 dark:text-textgray text-lg font-pixel text-[8px] leading-relaxed">
-            © 2026 MEDINE KAYNAK · ALL RIGHTS RESERVED<br>
-            <span class="text-pixgreen">PRESS START TO CONTINUE</span>
+        <div class="mt-8 text-xl opacity-60">
+            © 2026 Medine Kaynak · All rights reserved
         </div>
     </footer>
 
