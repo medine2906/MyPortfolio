@@ -130,22 +130,236 @@
         </div>
     </nav>
 
-    <header class="w-full max-w-5xl px-6 mt-8 mb-20 text-center flex flex-col items-center">
-        <div class="sv-panel p-3 inline-block mb-8">
-            <img src="./assets/profile-pic.jpg" alt="Medine Kaynak profile picture" class="pixelated-img w-36 h-36 object-cover rounded-md border-[3px] border-wooddark">
-        </div>
-        <h1 class="font-pixel text-xl md:text-3xl leading-relaxed mb-5">
+    <header class="w-full max-w-5xl px-6 mt-4 mb-16 text-center flex flex-col items-center">
+        <h1 class="font-pixel text-lg md:text-2xl leading-relaxed mb-3">
             JUST <span class="text-svorange">BUILD.</span><span class="blink">_</span>
         </h1>
-        <p class="text-3xl mb-3 opacity-90">Data Scientist &amp; AI Developer</p>
-        <p class="text-2xl opacity-70 max-w-2xl mb-10">
-            Computer Engineering student growing machine learning models, data pipelines and AI projects — one season at a time.
-        </p>
-        <div class="flex gap-6 flex-wrap justify-center">
-            <a href="#contact" class="sv-btn sv-btn-orange px-6 py-2 font-pixel text-[10px]">GET IN TOUCH</a>
-            <a href="./assets/resume-example.pdf" target="_blank" class="sv-btn px-6 py-2 font-pixel text-[10px]">DOWNLOAD CV</a>
+        <p class="text-2xl mb-8 opacity-90">Data Scientist &amp; AI Developer</p>
+
+        <div class="sv-panel p-3 w-full max-w-4xl relative select-none">
+            <div class="relative">
+                <canvas id="game" width="320" height="176" class="w-full rounded-md border-[3px] border-wooddark" style="image-rendering: pixelated;"></canvas>
+
+                <div id="titleScreen" class="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-md" style="background: rgba(35,25,15,0.75);">
+                    <div class="font-pixel text-panel text-sm md:text-xl">MEDINE'S WORLD</div>
+                    <div class="text-panel text-xl opacity-80 px-6">Walk with WASD / arrow keys · press E at a sign</div>
+                    <button onclick="startGame()" class="sv-btn sv-btn-orange px-6 py-3 font-pixel text-[11px] blink">▶ PRESS START</button>
+                </div>
+            </div>
+
+            <div class="dpad mt-3 justify-center gap-3 hidden">
+                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowLeft">◀</button>
+                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowUp">▲</button>
+                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowDown">▼</button>
+                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowRight">▶</button>
+                <button class="sv-btn sv-btn-orange px-6 py-3 font-pixel text-[10px]" data-k="KeyE">E</button>
+            </div>
         </div>
+        <p class="text-xl opacity-60 mt-4">…or just scroll down like a normal person ↓</p>
     </header>
+
+    <style>
+        @media (pointer:coarse) { .dpad { display:flex !important; } }
+    </style>
+
+    <script>
+    (function () {
+        const cvs = document.getElementById('game');
+        const ctx = cvs.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
+        const W = 320, H = 176;
+        let started = false, step = 0;
+
+        // ----- interactable signs -----
+        const signs = [
+            { x: 60,  y: 62,  label: 'PROJECTS', color: '#3e9d4a', target: '#projects' },
+            { x: 160, y: 48,  label: 'QUESTS',   color: '#e86a17', target: '#experience' },
+            { x: 254, y: 62,  label: 'BOARD',    color: '#29adff', target: '#social' },
+            { x: 218, y: 132, label: 'MAIL',     color: '#ff4da6', target: '#contact' },
+            { x: 96,  y: 132, label: 'CV',       color: '#9b59d0', target: 'CV' },
+        ];
+
+        // ----- player sprite from pixel grids -----
+        const PAL = { S:'#f2c9a0', H:'#8a4a21', D:'#3e6e9d', E:'#2b1d14', M:'#e86a17', K:'#2b1d14', L:'#a05a2c' };
+        const DOWN = [
+            '..HHHHHHHH..','.HHHHHHHHHH.','.HHSSSSSSHH.','.HSSSSSSSSH.',
+            '.HSESSSSESH.','.HSSSSSSSSH.','.HSSSMMSSSH.','.HHSSSSSSHH.',
+            '.LHHHHHHHHL.','..DDDDDDDD..','.DDDDDDDDDD.','.DDDDDDDDDD.',
+            '.DDDDDDDDDD.','..DDDDDDDD..','..KK....KK..','..KK....KK..'
+        ];
+        const UP = [
+            '..HHHHHHHH..','.HHHHHHHHHH.','.HHHHHHHHHH.','.HHHHHHHHHH.',
+            '.HHHHHHHHHH.','.HHHHHHHHHH.','.HHHHHHHHHH.','.HHHHHHHHHH.',
+            '.LHHHHHHHHL.','..DDDDDDDD..','.DDDDDDDDDD.','.DDDDDDDDDD.',
+            '.DDDDDDDDDD.','..DDDDDDDD..','..KK....KK..','..KK....KK..'
+        ];
+        const LEFT = [
+            '..HHHHHHHH..','.HHHHHHHHHH.','.HHSSSSSHHH.','.HSSSSSSHHH.',
+            '.HESSSSSHHH.','.HSSSSSSHHH.','.HSMSSSSHHH.','.HHSSSSSHHH.',
+            '.LHHHHHHHHL.','..DDDDDDDD..','.DDDDDDDDDD.','.DDDDDDDDDD.',
+            '.DDDDDDDDDD.','..DDDDDDDD..','...KK.KK....','...KK.KK....'
+        ];
+        function makeSprite(grid) {
+            const c = document.createElement('canvas');
+            c.width = 12; c.height = 16;
+            const g = c.getContext('2d');
+            grid.forEach((row, y) => [...row].forEach((ch, x) => {
+                if (PAL[ch]) { g.fillStyle = PAL[ch]; g.fillRect(x, y, 1, 1); }
+            }));
+            return c;
+        }
+        const SPR = { down: makeSprite(DOWN), up: makeSprite(UP), left: makeSprite(LEFT) };
+
+        // ----- static map layer -----
+        const map = document.createElement('canvas');
+        map.width = W; map.height = H;
+        const m = map.getContext('2d');
+        function rnd(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+        (function drawMap() {
+            m.fillStyle = '#6abe30'; m.fillRect(0, 0, W, H);
+            const r = rnd(42);
+            m.fillStyle = '#5aa828';
+            for (let i = 0; i < 260; i++) m.fillRect((r() * W) | 0, (r() * H) | 0, 2, 1);
+            m.fillStyle = '#7ed14a';
+            for (let i = 0; i < 90; i++) m.fillRect((r() * W) | 0, (r() * H) | 0, 1, 1);
+            // path
+            m.fillStyle = '#d8b56b'; m.fillRect(0, 92, W, 20);
+            m.fillStyle = '#c4a054';
+            for (let i = 0; i < 60; i++) m.fillRect((r() * W) | 0, 92 + ((r() * 20) | 0), 2, 1);
+            // flowers
+            const fc = ['#ff4da6', '#ffec27', '#ffffff'];
+            for (let i = 0; i < 18; i++) {
+                const x = (r() * (W - 20) + 10) | 0, y = (r() * (H - 60) + 44) | 0;
+                if (y > 86 && y < 118) continue;
+                m.fillStyle = fc[i % 3]; m.fillRect(x, y, 2, 2);
+                m.fillStyle = '#3e7d20'; m.fillRect(x, y + 2, 1, 2);
+            }
+            // border trees
+            function tree(x, y) {
+                m.fillStyle = '#5b3a29'; m.fillRect(x + 5, y + 14, 4, 8);
+                m.fillStyle = '#2e7d32'; m.fillRect(x + 1, y + 4, 12, 11);
+                m.fillStyle = '#3e9d4a'; m.fillRect(x + 3, y + 1, 8, 9);
+                m.fillStyle = '#67c96b'; m.fillRect(x + 4, y + 3, 3, 3);
+            }
+            for (let x = 2; x < W - 14; x += 26) tree(x, 2);
+            tree(2, 60); tree(W - 16, 96); tree(2, 130); tree(W - 16, 140);
+            // signs
+            signs.forEach(s => {
+                m.fillStyle = '#5b3a29'; m.fillRect(s.x - 1, s.y + 6, 3, 8);
+                m.fillStyle = '#a05a2c'; m.fillRect(s.x - 11, s.y - 6, 23, 13);
+                m.fillStyle = '#5b2c0f';
+                m.strokeStyle = '#5b2c0f'; m.lineWidth = 1;
+                m.strokeRect(s.x - 10.5, s.y - 5.5, 22, 12);
+                m.fillStyle = s.color; m.fillRect(s.x - 3, s.y - 3, 6, 6);
+            });
+        })();
+
+        // ----- player state -----
+        const player = { x: 160, y: 120, dir: 'down', moving: false };
+        const keys = {};
+        const KEYMAP = { KeyW:'up', ArrowUp:'up', KeyS:'down', ArrowDown:'down', KeyA:'left', ArrowLeft:'left', KeyD:'right', ArrowRight:'right' };
+
+        function nearSign() {
+            return signs.find(s => Math.hypot(player.x - s.x, player.y - s.y) < 22);
+        }
+        function interact() {
+            const s = nearSign();
+            if (!s) return;
+            if (s.target === 'CV') window.open('./assets/resume-example.pdf', '_blank');
+            else document.querySelector(s.target).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.addEventListener('keydown', e => {
+            if (!started) return;
+            const rect = cvs.getBoundingClientRect();
+            const visible = rect.bottom > 0 && rect.top < innerHeight;
+            if (!visible) return;
+            if (KEYMAP[e.code] || e.code === 'Space') e.preventDefault();
+            keys[e.code] = true;
+            if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') interact();
+        });
+        window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+        // touch dpad
+        document.querySelectorAll('.dpad [data-k]').forEach(btn => {
+            const k = btn.dataset.k;
+            const on = e => { e.preventDefault(); if (k === 'KeyE') interact(); else keys[k] = true; };
+            const off = e => { e.preventDefault(); keys[k] = false; };
+            btn.addEventListener('touchstart', on); btn.addEventListener('touchend', off);
+            btn.addEventListener('mousedown', on); btn.addEventListener('mouseup', off);
+        });
+
+        // click a sign to interact
+        cvs.addEventListener('click', e => {
+            if (!started) return;
+            const rect = cvs.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width * W;
+            const y = (e.clientY - rect.top) / rect.height * H;
+            const s = signs.find(s => Math.hypot(x - s.x, y - s.y) < 26);
+            if (s) {
+                if (s.target === 'CV') window.open('./assets/resume-example.pdf', '_blank');
+                else document.querySelector(s.target).scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        window.startGame = function () {
+            started = true;
+            document.getElementById('titleScreen').style.display = 'none';
+        };
+
+        function update() {
+            let dx = 0, dy = 0;
+            for (const k in KEYMAP) if (keys[k]) {
+                if (KEYMAP[k] === 'up') dy = -1;
+                if (KEYMAP[k] === 'down') dy = 1;
+                if (KEYMAP[k] === 'left') dx = -1;
+                if (KEYMAP[k] === 'right') dx = 1;
+            }
+            player.moving = dx !== 0 || dy !== 0;
+            if (player.moving) {
+                const sp = 1.3;
+                player.x = Math.max(10, Math.min(W - 10, player.x + dx * sp));
+                player.y = Math.max(34, Math.min(H - 10, player.y + dy * sp));
+                player.dir = dy < 0 ? 'up' : dy > 0 ? 'down' : dx < 0 ? 'left' : 'right';
+                step++;
+            }
+        }
+
+        function draw() {
+            ctx.drawImage(map, 0, 0);
+            // sign labels (crisp text on top)
+            ctx.font = '9px monospace';
+            ctx.textAlign = 'center';
+            signs.forEach(s => {
+                ctx.fillStyle = 'rgba(43,29,20,0.85)';
+                ctx.fillRect(s.x - 22, s.y - 20, 44, 11);
+                ctx.fillStyle = '#fff5de';
+                ctx.fillText(s.label, s.x, s.y - 11.5);
+            });
+            // player
+            const bob = player.moving && (Math.floor(step / 6) % 2) ? 1 : 0;
+            const px = Math.round(player.x - 6), py = Math.round(player.y - 14 - bob);
+            ctx.save();
+            if (player.dir === 'right') {
+                ctx.translate(px + 12, 0); ctx.scale(-1, 1);
+                ctx.drawImage(SPR.left, 0, py);
+            } else {
+                ctx.drawImage(SPR[player.dir] || SPR.down, px, py);
+            }
+            ctx.restore();
+            // interact prompt
+            const s = nearSign();
+            if (s && started) {
+                ctx.fillStyle = 'rgba(43,29,20,0.9)';
+                ctx.fillRect(player.x - 26, player.y - 34, 52, 12);
+                ctx.fillStyle = '#ffec27';
+                ctx.fillText('[E] ' + s.label, player.x, player.y - 25);
+            }
+        }
+
+        (function loop() { update(); draw(); requestAnimationFrame(loop); })();
+    })();
+    </script>
 
     <section class="w-full max-w-5xl px-6 mb-20">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
@@ -342,6 +556,7 @@
             <p class="text-2xl mb-6">
                 <a href="mailto:medinekaynak2906@gmail.com" class="underline decoration-dotted underline-offset-4 hover:text-svorange transition">medinekaynak2906@gmail.com</a>
             </p>
+            <a href="./assets/resume-example.pdf" target="_blank" class="sv-btn sv-btn-orange inline-block px-6 py-2 font-pixel text-[10px] mb-6">DOWNLOAD CV</a>
             <div class="flex justify-center gap-5">
                 <a href="https://www.linkedin.com/in/medinekaynak2906/" target="_blank" class="sv-btn p-3" aria-label="LinkedIn">
                     <svg class="w-6 h-6 fill-current text-[#0077b5]" viewBox="0 0 24 24" aria-hidden="true">
