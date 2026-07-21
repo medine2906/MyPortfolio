@@ -1,584 +1,388 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medine Kaynak</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        daybg: '#f0dcae',
-                        nightbg: '#232a45',
-                        panel: '#fff5de',
-                        panelgold: '#e9b97e',
-                        wood: '#8a4a21',
-                        wooddark: '#5b2c0f',
-                        svorange: '#e86a17',
-                        svgreen: '#3e9d4a',
-                        svblue: '#29adff',
-                        svpink: '#ff4da6'
-                    },
-                    fontFamily: {
-                        pixel: ['"Press Start 2P"', 'monospace'],
-                        retro: ['VT323', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
-    <script>
-        // Sayfa yüklendiğinde temayı kontrol et
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-        function toggleTheme() {
-            document.documentElement.classList.toggle('dark');
-            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        }
-        function toggleProj(card) {
-            card.classList.toggle('open');
-        }
-    </script>
-    <style>
-        @font-face {
-            font-family: 'Press Start 2P';
-            font-style: normal; font-weight: 400; font-display: swap;
-            src: url('./assets/fonts/press-start-2p-latin-400-normal.woff2') format('woff2');
-            unicode-range: U+0000-00FF, U+0131, U+2000-206F, U+20AC, U+2212, U+2215;
-        }
-        @font-face {
-            font-family: 'Press Start 2P';
-            font-style: normal; font-weight: 400; font-display: swap;
-            src: url('./assets/fonts/press-start-2p-latin-ext-400-normal.woff2') format('woff2');
-            unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-        }
-        @font-face {
-            font-family: 'VT323';
-            font-style: normal; font-weight: 400; font-display: swap;
-            src: url('./assets/fonts/vt323-latin-400-normal.woff2') format('woff2');
-            unicode-range: U+0000-00FF, U+0131, U+2000-206F, U+20AC, U+2212, U+2215;
-        }
-        @font-face {
-            font-family: 'VT323';
-            font-style: normal; font-weight: 400; font-display: swap;
-            src: url('./assets/fonts/vt323-latin-ext-400-normal.woff2') format('woff2');
-            unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDINE.EXE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#f3f1e0;
+    --ink:#141414;
+    --lime:#c6f24e;
+    --pink:#ff2d87;
+    --white:#ffffff;
+    --shadow:6px 6px 0 var(--ink);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-snap-type:y proximity}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'VT323',ui-monospace,monospace;
+    font-size:22px;
+    line-height:1.25;
+    -webkit-font-smoothing:none;
+    overflow-x:hidden;
+  }
+  /* subtle pixel grid background */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:linear-gradient(rgba(20,20,20,.035) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(20,20,20,.035) 1px,transparent 1px);
+    background-size:32px 32px;
+  }
+  h1,h2,h3,.pix{font-family:'Press Start 2P',monospace;line-height:1.4;-webkit-font-smoothing:none}
 
-        body {
-            transition: background-color 0.3s ease;
-            font-family: 'VT323', monospace;
-            font-size: 1.35rem;
-            line-height: 1.4;
-        }
-        /* Stardew wooden/parchment panel */
-        .sv-panel {
-            background: #fff5de;
-            border: 4px solid #8a4a21;
-            border-radius: 10px;
-            box-shadow: inset 0 0 0 4px #e9b97e, 5px 5px 0 rgba(43,29,20,0.3);
-            color: #5b2c0f;
-        }
-        .sv-sign {
-            background: #a05a2c;
-            border: 4px solid #5b2c0f;
-            border-radius: 8px;
-            box-shadow: inset 0 0 0 3px #c8873e, 4px 4px 0 rgba(43,29,20,0.35);
-            color: #fff5de;
-        }
-        .sv-btn {
-            background: #fff5de;
-            border: 4px solid #8a4a21;
-            border-radius: 8px;
-            box-shadow: inset 0 0 0 3px #e9b97e, 4px 4px 0 rgba(43,29,20,0.3);
-            color: #5b2c0f;
-            transition: transform 0.06s, box-shadow 0.06s;
-        }
-        .sv-btn:hover { transform: translate(2px,2px); box-shadow: inset 0 0 0 3px #e9b97e, 2px 2px 0 rgba(43,29,20,0.3); }
-        .sv-btn-orange { background: #e86a17; color: #fff5de; box-shadow: inset 0 0 0 3px #ffb570, 4px 4px 0 rgba(43,29,20,0.3); }
-        .sv-btn-orange:hover { box-shadow: inset 0 0 0 3px #ffb570, 2px 2px 0 rgba(43,29,20,0.3); }
-        .pixelated-img { image-rendering: pixelated; }
-        .blink { animation: blink 1s steps(1) infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-        /* energy/skill bar */
-        .sv-bar { height: 16px; background: #d9c49a; border: 3px solid #5b2c0f; border-radius: 6px; overflow: hidden; }
-        .sv-fill { height: 100%; }
-        /* project cards: click to open description */
-        .proj { cursor: pointer; transition: transform 0.08s; }
-        .proj:hover { transform: translate(-2px,-2px); }
-        .proj .proj-desc { display: none; }
-        .proj.open .proj-desc { display: block; }
-        .proj .proj-hint { display: block; }
-        .proj.open .proj-hint { display: none; }
-    </style>
+  /* ---------- top bar ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 22px;background:var(--cream);
+    border-bottom:3px solid var(--ink);
+  }
+  header .logo{font-family:'Press Start 2P';font-size:13px;color:var(--ink)}
+  header .logo b{color:var(--pink)}
+  header .status{font-family:'Press Start 2P';font-size:9px;color:var(--ink);
+    background:var(--lime);border:3px solid var(--ink);padding:6px 8px;box-shadow:3px 3px 0 var(--ink)}
+
+  /* ---------- side dot nav ---------- */
+  nav.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:50;
+    display:flex;flex-direction:column;gap:14px}
+  nav.dots a{width:16px;height:16px;background:var(--white);border:3px solid var(--ink);
+    box-shadow:2px 2px 0 var(--ink);transition:background .2s,transform .2s}
+  nav.dots a.active{background:var(--pink);transform:scale(1.15)}
+
+  /* ---------- panels ---------- */
+  .panel{
+    position:relative;z-index:1;
+    min-height:100vh;scroll-snap-align:start;
+    display:flex;align-items:center;justify-content:center;
+    padding:96px 24px 64px;
+    opacity:0;transform:translateY(48px) scale(.985);
+    transition:opacity .6s ease,transform .6s ease;
+  }
+  .panel.in{opacity:1;transform:none}
+  .wrap{width:100%;max-width:1000px;position:relative}
+
+  /* decorative pixel doodads */
+  .doodad{position:absolute;z-index:0;opacity:.9;image-rendering:pixelated}
+  .plus{font-family:'Press Start 2P';color:var(--ink);font-size:20px}
+  .sq{width:16px;height:16px}
+
+  /* ---------- HERO ---------- */
+  #hero .wrap{display:flex;gap:40px;align-items:center;flex-wrap:wrap;justify-content:center}
+  #hero .intro{flex:1 1 340px;min-width:300px}
+  .tag{display:inline-block;font-family:'Press Start 2P';font-size:10px;
+    background:var(--lime);border:3px solid var(--ink);padding:8px 10px;
+    box-shadow:4px 4px 0 var(--ink);margin-bottom:22px}
+  #hero h1{font-size:clamp(30px,7vw,58px);letter-spacing:1px}
+  #hero h1 .l1{color:var(--ink);display:block}
+  #hero h1 .l2{color:var(--pink);display:block}
+  #hero p.role{font-size:26px;margin:20px 0 26px;color:var(--ink)}
+  #hero p.role b{color:var(--pink)}
+  .btn{display:inline-flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;
+    font-family:'Press Start 2P';font-size:11px;padding:14px 18px;border:3px solid var(--ink);
+    box-shadow:var(--shadow);transition:transform .1s,box-shadow .1s}
+  .btn:active{transform:translate(3px,3px);box-shadow:3px 3px 0 var(--ink)}
+  .btn.primary{background:var(--ink);color:var(--lime)}
+  .btn.ghost{background:var(--white);color:var(--ink)}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap}
+
+  /* profile card */
+  .idcard{flex:0 0 300px;position:relative;background:var(--white);
+    border:4px solid var(--ink);box-shadow:10px 10px 0 var(--ink);padding:16px}
+  .idcard .idtag{position:absolute;top:-14px;left:16px;font-family:'Press Start 2P';
+    font-size:9px;background:var(--pink);color:var(--white);border:3px solid var(--ink);
+    padding:6px 8px;box-shadow:3px 3px 0 var(--ink)}
+  .idcard img{width:100%;height:300px;object-fit:cover;
+    border:3px solid var(--ink);display:block;filter:contrast(1.05) saturate(1.05)}
+  .idcard .meta{font-family:'Press Start 2P';font-size:9px;margin-top:14px;line-height:1.9}
+  .idcard .meta span{color:var(--pink)}
+
+  .scrollcue{position:absolute;bottom:-54px;left:0;right:0;text-align:center;
+    font-family:'Press Start 2P';font-size:10px;color:var(--ink);animation:bob 1.1s steps(2) infinite}
+  @keyframes bob{0%{transform:translateY(0)}100%{transform:translateY(8px)}}
+
+  /* ---------- generic card / section heading ---------- */
+  .kicker{font-family:'Press Start 2P';font-size:10px;color:var(--pink);margin-bottom:14px}
+  .panel h2{font-size:clamp(24px,5vw,40px);margin-bottom:26px}
+  .panel h2 .hl{color:var(--lime);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill}
+  .card{background:var(--white);border:4px solid var(--ink);box-shadow:var(--shadow);padding:24px}
+
+  /* about */
+  #about .card p{font-size:24px;margin-bottom:16px}
+  #about .card b{background:var(--lime);padding:0 4px;border:2px solid var(--ink)}
+  #about .card i{color:var(--pink);font-style:normal;font-weight:bold}
+
+  /* traits */
+  .traits{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:18px}
+  .trait{background:var(--white);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);
+    padding:18px 8px;text-align:center}
+  .trait .ic{width:52px;height:52px;margin:0 auto 12px;border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--lime)}
+  .trait .ic.pk{background:var(--pink)}
+  .trait .nm{font-family:'Press Start 2P';font-size:8px;line-height:1.6}
+
+  /* projects list */
+  .plist{display:flex;flex-direction:column;gap:16px}
+  .prow{display:flex;align-items:center;gap:18px;background:var(--white);
+    border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:16px;
+    text-decoration:none;color:var(--ink);transition:transform .1s,box-shadow .1s}
+  .prow:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+  .prow:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+  .prow .num{flex:0 0 auto;font-family:'Press Start 2P';font-size:12px;background:var(--lime);
+    border:3px solid var(--ink);padding:10px;box-shadow:2px 2px 0 var(--ink)}
+  .prow .body{flex:1 1 auto;min-width:0}
+  .prow .body h3{font-family:'Press Start 2P';font-size:13px;margin-bottom:8px}
+  .prow .body .sub{font-size:20px;color:#555}
+  .prow .body .sub .dot{color:var(--pink)}
+  .prow .body .badge{display:inline-block;margin-top:8px;font-family:'Press Start 2P';font-size:7px;
+    background:var(--pink);color:var(--white);border:2px solid var(--ink);padding:5px 7px}
+  .prow .go{flex:0 0 auto;width:44px;height:44px;background:var(--ink);color:var(--lime);
+    border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px}
+
+  /* experience */
+  .xp{display:flex;flex-direction:column;gap:16px}
+  .xrow{display:flex;gap:16px;background:var(--white);border:3px solid var(--ink);
+    box-shadow:4px 4px 0 var(--ink);padding:16px}
+  .xrow .yr{flex:0 0 96px;font-family:'Press Start 2P';font-size:8px;color:var(--pink);padding-top:4px}
+  .xrow h3{font-family:'Press Start 2P';font-size:11px;margin-bottom:8px}
+  .xrow .org{color:var(--pink);font-size:20px}
+  .xrow .desc{font-size:19px;color:#555}
+
+  /* contact */
+  #contact .wrap{text-align:center}
+  #contact h2{margin-bottom:20px}
+  #contact .mail{display:inline-block;font-family:'Press Start 2P';font-size:12px;
+    background:var(--lime);border:3px solid var(--ink);padding:14px 16px;box-shadow:var(--shadow);
+    text-decoration:none;color:var(--ink);margin-bottom:26px;word-break:break-all}
+  .socials{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .socials a{font-family:'Press Start 2P';font-size:10px;padding:12px 14px;border:3px solid var(--ink);
+    box-shadow:4px 4px 0 var(--ink);text-decoration:none;background:var(--white);color:var(--ink);
+    transition:transform .1s,box-shadow .1s}
+  .socials a:hover{background:var(--pink);color:var(--white)}
+  .socials a:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+  footer{position:relative;z-index:1;text-align:center;padding:26px;
+    font-family:'Press Start 2P';font-size:8px;border-top:3px solid var(--ink);background:var(--cream)}
+
+  @media(max-width:640px){
+    body{font-size:20px}
+    header .status{display:none}
+    nav.dots{right:10px;gap:10px}
+    nav.dots a{width:13px;height:13px}
+    .xrow{flex-direction:column;gap:6px}
+    .xrow .yr{flex-basis:auto}
+    #hero .idcard{flex-basis:260px}
+  }
+</style>
 </head>
-<body class="bg-daybg dark:bg-nightbg antialiased min-h-screen flex flex-col items-center transition-colors text-wooddark dark:text-panel">
+<body>
 
-    <nav class="w-full max-w-5xl px-6 py-8 flex justify-between items-center flex-wrap gap-4">
-        <div class="font-pixel text-xs md:text-sm">MEDINE KAYNAK</div>
-        <div class="flex items-center gap-4 text-2xl">
-            <a href="#projects" class="hover:text-svorange transition">Projects</a>
-            <a href="#experience" class="hover:text-svorange transition">Quests</a>
-            <a href="#contact" class="hover:text-svorange transition">Contact</a>
-            <button onclick="toggleTheme()" class="sv-btn px-3 py-1 text-lg" aria-label="Toggle Theme">☀/🌙</button>
+<!-- reusable pixel heart -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="pxheart" viewBox="0 0 7 6">
+    <g fill="currentColor">
+      <rect x="1" y="0" width="2" height="1"/><rect x="4" y="0" width="2" height="1"/>
+      <rect x="0" y="1" width="7" height="1"/><rect x="0" y="2" width="7" height="1"/>
+      <rect x="1" y="3" width="5" height="1"/><rect x="2" y="4" width="3" height="1"/>
+      <rect x="3" y="5" width="1" height="1"/>
+    </g>
+  </symbol>
+</svg>
+
+<header>
+  <div class="logo">MEDINE<b>.EXE</b></div>
+  <div class="status">● ONLINE</div>
+</header>
+
+<nav class="dots">
+  <a href="#hero" data-t="hero" class="active" aria-label="Intro"></a>
+  <a href="#about" data-t="about" aria-label="About"></a>
+  <a href="#skills" data-t="skills" aria-label="Skills"></a>
+  <a href="#projects" data-t="projects" aria-label="Projects"></a>
+  <a href="#experience" data-t="experience" aria-label="Experience"></a>
+  <a href="#contact" data-t="contact" aria-label="Contact"></a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="panel" id="hero">
+  <span class="doodad plus" style="top:6%;left:4%">+</span>
+  <span class="doodad plus" style="bottom:12%;left:10%;color:var(--pink)">+</span>
+  <span class="doodad sq" style="top:18%;right:8%;background:var(--lime);border:3px solid var(--ink)"></span>
+  <span class="doodad sq" style="bottom:22%;right:16%;background:var(--pink);border:3px solid var(--ink)"></span>
+  <svg class="doodad" style="top:8%;right:20%;color:var(--pink)" width="44" height="38"><use href="#pxheart" width="7" height="6" transform="scale(6)"/></svg>
+
+  <div class="wrap">
+    <div class="intro">
+      <span class="tag">// WHO_AM_I</span>
+      <h1><span class="l1">MEDINE</span><span class="l2">KAYNAK</span></h1>
+      <p class="role">Data Scientist &amp; <b>AI Developer</b></p>
+      <div class="btn-row">
+        <a href="#projects" class="btn primary">SEE PROJECTS →</a>
+        <a href="#contact" class="btn ghost">CONTACT</a>
+      </div>
+    </div>
+
+    <div class="idcard">
+      <span class="idtag">ID #DEV-2906</span>
+      <img src="./assets/profile-pic.jpg" alt="Medine Kaynak">
+      <div class="meta">
+        NAME &nbsp;: <span>MEDINE</span><br>
+        CLASS : <span>AI / ML</span><br>
+        STATUS: <span>BUILDING</span>
+      </div>
+    </div>
+
+    <div class="scrollcue">SCROLL DOWN ▼</div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="panel" id="about">
+  <span class="doodad plus" style="top:14%;right:8%">+</span>
+  <span class="doodad sq" style="bottom:16%;left:8%;background:var(--lime);border:3px solid var(--ink)"></span>
+  <div class="wrap">
+    <p class="kicker">// FILE: about_me.txt</p>
+    <h2>WHO <span class="hl">AM&nbsp;I</span>?</h2>
+    <div class="card">
+      <p>I'm a passionate <b>computer engineering</b> student with a strong interest in <i>AI</i>, <i>machine learning</i> and <i>data science</i>.</p>
+      <p>My journey in tech runs on curiosity and a deep desire to understand and <i>build</i> innovative solutions.</p>
+      <p>Always learning, sharing knowledge, and collaborating with people who share the same spark. ♥</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SKILLS / TRAITS ============ -->
+<section class="panel" id="skills">
+  <span class="doodad plus" style="top:12%;left:6%;color:var(--pink)">+</span>
+  <span class="doodad sq" style="top:20%;right:10%;background:var(--pink);border:3px solid var(--ink)"></span>
+  <div class="wrap">
+    <p class="kicker">// LOADED_MODULES</p>
+    <h2>MY <span class="hl">STACK</span></h2>
+    <div class="traits">
+      <div class="trait"><div class="ic">🐍</div><div class="nm">PYTHON</div></div>
+      <div class="trait"><div class="ic pk">🧠</div><div class="nm">MACHINE<br>LEARNING</div></div>
+      <div class="trait"><div class="ic">📊</div><div class="nm">DATA<br>SCIENCE</div></div>
+      <div class="trait"><div class="ic pk">⚡</div><div class="nm">JAVASCRIPT</div></div>
+      <div class="trait"><div class="ic">🗄️</div><div class="nm">POSTGRE<br>SQL</div></div>
+      <div class="trait"><div class="ic pk">🟩</div><div class="nm">NODE.JS</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="panel" id="projects">
+  <span class="doodad plus" style="bottom:10%;right:6%">+</span>
+  <div class="wrap">
+    <p class="kicker">// AVAILABLE_NOW</p>
+    <h2>SELECTED <span class="hl">PROJECTS</span></h2>
+    <div class="plist">
+      <a class="prow" href="https://github.com/medine1729/trendAI" target="_blank" rel="noopener">
+        <div class="num">01</div>
+        <div class="body">
+          <h3>trendAI</h3>
+          <div class="sub">AI trend analysis <span class="dot">•</span> Python <span class="dot">•</span> ML</div>
+          <span class="badge">▶ GITHUB</span>
         </div>
-    </nav>
-
-    <header class="w-full max-w-5xl px-6 mt-4 mb-16 text-center flex flex-col items-center">
-        <h1 class="font-pixel text-lg md:text-2xl leading-relaxed mb-3">
-            JUST <span class="text-svorange">BUILD.</span><span class="blink">_</span>
-        </h1>
-        <p class="text-2xl mb-8 opacity-90">Data Scientist &amp; AI Developer</p>
-
-        <div class="sv-panel p-3 w-full max-w-4xl relative select-none">
-            <div class="relative">
-                <canvas id="game" width="320" height="176" class="w-full rounded-md border-[3px] border-wooddark" style="image-rendering: pixelated;"></canvas>
-
-                <div id="titleScreen" class="absolute inset-0 flex flex-col items-center justify-center gap-5 rounded-md" style="background: rgba(35,25,15,0.75);">
-                    <div class="font-pixel text-panel text-sm md:text-xl">MEDINE'S WORLD</div>
-                    <div class="text-panel text-xl opacity-80 px-6">Walk with WASD / arrow keys · press E at a sign</div>
-                    <button onclick="startGame()" class="sv-btn sv-btn-orange px-6 py-3 font-pixel text-[11px] blink">▶ PRESS START</button>
-                </div>
-            </div>
-
-            <div class="dpad mt-3 justify-center gap-3 hidden">
-                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowLeft">◀</button>
-                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowUp">▲</button>
-                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowDown">▼</button>
-                <button class="sv-btn px-5 py-3 text-2xl" data-k="ArrowRight">▶</button>
-                <button class="sv-btn sv-btn-orange px-6 py-3 font-pixel text-[10px]" data-k="KeyE">E</button>
-            </div>
+        <div class="go">→</div>
+      </a>
+      <a class="prow" href="https://github.com/medine1729/Hepsiburada-Hackathon5" target="_blank" rel="noopener">
+        <div class="num">02</div>
+        <div class="body">
+          <h3>HEPSIBURADA</h3>
+          <div class="sub">Hackathon 5 <span class="dot">•</span> Team project</div>
+          <span class="badge">▶ HACKATHON</span>
         </div>
-        <p class="text-xl opacity-60 mt-4">…or just scroll down like a normal person ↓</p>
-    </header>
-
-    <style>
-        @media (pointer:coarse) { .dpad { display:flex !important; } }
-    </style>
-
-    <script>
-    (function () {
-        const cvs = document.getElementById('game');
-        const ctx = cvs.getContext('2d');
-        ctx.imageSmoothingEnabled = false;
-        const W = 320, H = 176;
-        let started = false, step = 0;
-
-        // ----- interactable signs -----
-        const signs = [
-            { x: 60,  y: 62,  label: 'PROJECTS', color: '#3e9d4a', target: '#projects' },
-            { x: 160, y: 48,  label: 'QUESTS',   color: '#e86a17', target: '#experience' },
-            { x: 254, y: 62,  label: 'BOARD',    color: '#29adff', target: '#social' },
-            { x: 218, y: 132, label: 'MAIL',     color: '#ff4da6', target: '#contact' },
-            { x: 96,  y: 132, label: 'CV',       color: '#9b59d0', target: 'CV' },
-        ];
-
-        // ----- player sprite from pixel grids -----
-        const PAL = { S:'#f2c9a0', H:'#8a4a21', D:'#3e6e9d', E:'#2b1d14', M:'#e86a17', K:'#2b1d14', L:'#a05a2c' };
-        const DOWN = [
-            '..HHHHHHHH..','.HHHHHHHHHH.','.HHSSSSSSHH.','.HSSSSSSSSH.',
-            '.HSESSSSESH.','.HSSSSSSSSH.','.HSSSMMSSSH.','.HHSSSSSSHH.',
-            '.LHHHHHHHHL.','..DDDDDDDD..','.DDDDDDDDDD.','.DDDDDDDDDD.',
-            '.DDDDDDDDDD.','..DDDDDDDD..','..KK....KK..','..KK....KK..'
-        ];
-        const UP = [
-            '..HHHHHHHH..','.HHHHHHHHHH.','.HHHHHHHHHH.','.HHHHHHHHHH.',
-            '.HHHHHHHHHH.','.HHHHHHHHHH.','.HHHHHHHHHH.','.HHHHHHHHHH.',
-            '.LHHHHHHHHL.','..DDDDDDDD..','.DDDDDDDDDD.','.DDDDDDDDDD.',
-            '.DDDDDDDDDD.','..DDDDDDDD..','..KK....KK..','..KK....KK..'
-        ];
-        const LEFT = [
-            '..HHHHHHHH..','.HHHHHHHHHH.','.HHSSSSSHHH.','.HSSSSSSHHH.',
-            '.HESSSSSHHH.','.HSSSSSSHHH.','.HSMSSSSHHH.','.HHSSSSSHHH.',
-            '.LHHHHHHHHL.','..DDDDDDDD..','.DDDDDDDDDD.','.DDDDDDDDDD.',
-            '.DDDDDDDDDD.','..DDDDDDDD..','...KK.KK....','...KK.KK....'
-        ];
-        function makeSprite(grid) {
-            const c = document.createElement('canvas');
-            c.width = 12; c.height = 16;
-            const g = c.getContext('2d');
-            grid.forEach((row, y) => [...row].forEach((ch, x) => {
-                if (PAL[ch]) { g.fillStyle = PAL[ch]; g.fillRect(x, y, 1, 1); }
-            }));
-            return c;
-        }
-        const SPR = { down: makeSprite(DOWN), up: makeSprite(UP), left: makeSprite(LEFT) };
-
-        // ----- static map layer -----
-        const map = document.createElement('canvas');
-        map.width = W; map.height = H;
-        const m = map.getContext('2d');
-        function rnd(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
-        (function drawMap() {
-            m.fillStyle = '#6abe30'; m.fillRect(0, 0, W, H);
-            const r = rnd(42);
-            m.fillStyle = '#5aa828';
-            for (let i = 0; i < 260; i++) m.fillRect((r() * W) | 0, (r() * H) | 0, 2, 1);
-            m.fillStyle = '#7ed14a';
-            for (let i = 0; i < 90; i++) m.fillRect((r() * W) | 0, (r() * H) | 0, 1, 1);
-            // path
-            m.fillStyle = '#d8b56b'; m.fillRect(0, 92, W, 20);
-            m.fillStyle = '#c4a054';
-            for (let i = 0; i < 60; i++) m.fillRect((r() * W) | 0, 92 + ((r() * 20) | 0), 2, 1);
-            // flowers
-            const fc = ['#ff4da6', '#ffec27', '#ffffff'];
-            for (let i = 0; i < 18; i++) {
-                const x = (r() * (W - 20) + 10) | 0, y = (r() * (H - 60) + 44) | 0;
-                if (y > 86 && y < 118) continue;
-                m.fillStyle = fc[i % 3]; m.fillRect(x, y, 2, 2);
-                m.fillStyle = '#3e7d20'; m.fillRect(x, y + 2, 1, 2);
-            }
-            // border trees
-            function tree(x, y) {
-                m.fillStyle = '#5b3a29'; m.fillRect(x + 5, y + 14, 4, 8);
-                m.fillStyle = '#2e7d32'; m.fillRect(x + 1, y + 4, 12, 11);
-                m.fillStyle = '#3e9d4a'; m.fillRect(x + 3, y + 1, 8, 9);
-                m.fillStyle = '#67c96b'; m.fillRect(x + 4, y + 3, 3, 3);
-            }
-            for (let x = 2; x < W - 14; x += 26) tree(x, 2);
-            tree(2, 60); tree(W - 16, 96); tree(2, 130); tree(W - 16, 140);
-            // signs
-            signs.forEach(s => {
-                m.fillStyle = '#5b3a29'; m.fillRect(s.x - 1, s.y + 6, 3, 8);
-                m.fillStyle = '#a05a2c'; m.fillRect(s.x - 11, s.y - 6, 23, 13);
-                m.fillStyle = '#5b2c0f';
-                m.strokeStyle = '#5b2c0f'; m.lineWidth = 1;
-                m.strokeRect(s.x - 10.5, s.y - 5.5, 22, 12);
-                m.fillStyle = s.color; m.fillRect(s.x - 3, s.y - 3, 6, 6);
-            });
-        })();
-
-        // ----- player state -----
-        const player = { x: 160, y: 120, dir: 'down', moving: false };
-        const keys = {};
-        const KEYMAP = { KeyW:'up', ArrowUp:'up', KeyS:'down', ArrowDown:'down', KeyA:'left', ArrowLeft:'left', KeyD:'right', ArrowRight:'right' };
-
-        function nearSign() {
-            return signs.find(s => Math.hypot(player.x - s.x, player.y - s.y) < 22);
-        }
-        function interact() {
-            const s = nearSign();
-            if (!s) return;
-            if (s.target === 'CV') window.open('./assets/resume-example.pdf', '_blank');
-            else document.querySelector(s.target).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        window.addEventListener('keydown', e => {
-            if (!started) return;
-            const rect = cvs.getBoundingClientRect();
-            const visible = rect.bottom > 0 && rect.top < innerHeight;
-            if (!visible) return;
-            if (KEYMAP[e.code] || e.code === 'Space') e.preventDefault();
-            keys[e.code] = true;
-            if (e.code === 'KeyE' || e.code === 'Enter' || e.code === 'Space') interact();
-        });
-        window.addEventListener('keyup', e => { keys[e.code] = false; });
-
-        // touch dpad
-        document.querySelectorAll('.dpad [data-k]').forEach(btn => {
-            const k = btn.dataset.k;
-            const on = e => { e.preventDefault(); if (k === 'KeyE') interact(); else keys[k] = true; };
-            const off = e => { e.preventDefault(); keys[k] = false; };
-            btn.addEventListener('touchstart', on); btn.addEventListener('touchend', off);
-            btn.addEventListener('mousedown', on); btn.addEventListener('mouseup', off);
-        });
-
-        // click a sign to interact
-        cvs.addEventListener('click', e => {
-            if (!started) return;
-            const rect = cvs.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width * W;
-            const y = (e.clientY - rect.top) / rect.height * H;
-            const s = signs.find(s => Math.hypot(x - s.x, y - s.y) < 26);
-            if (s) {
-                if (s.target === 'CV') window.open('./assets/resume-example.pdf', '_blank');
-                else document.querySelector(s.target).scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-
-        window.startGame = function () {
-            started = true;
-            document.getElementById('titleScreen').style.display = 'none';
-        };
-
-        function update() {
-            let dx = 0, dy = 0;
-            for (const k in KEYMAP) if (keys[k]) {
-                if (KEYMAP[k] === 'up') dy = -1;
-                if (KEYMAP[k] === 'down') dy = 1;
-                if (KEYMAP[k] === 'left') dx = -1;
-                if (KEYMAP[k] === 'right') dx = 1;
-            }
-            player.moving = dx !== 0 || dy !== 0;
-            if (player.moving) {
-                const sp = 1.3;
-                player.x = Math.max(10, Math.min(W - 10, player.x + dx * sp));
-                player.y = Math.max(34, Math.min(H - 10, player.y + dy * sp));
-                player.dir = dy < 0 ? 'up' : dy > 0 ? 'down' : dx < 0 ? 'left' : 'right';
-                step++;
-            }
-        }
-
-        function draw() {
-            ctx.drawImage(map, 0, 0);
-            // sign labels (crisp text on top)
-            ctx.font = '9px monospace';
-            ctx.textAlign = 'center';
-            signs.forEach(s => {
-                ctx.fillStyle = 'rgba(43,29,20,0.85)';
-                ctx.fillRect(s.x - 22, s.y - 20, 44, 11);
-                ctx.fillStyle = '#fff5de';
-                ctx.fillText(s.label, s.x, s.y - 11.5);
-            });
-            // player
-            const bob = player.moving && (Math.floor(step / 6) % 2) ? 1 : 0;
-            const px = Math.round(player.x - 6), py = Math.round(player.y - 14 - bob);
-            ctx.save();
-            if (player.dir === 'right') {
-                ctx.translate(px + 12, 0); ctx.scale(-1, 1);
-                ctx.drawImage(SPR.left, 0, py);
-            } else {
-                ctx.drawImage(SPR[player.dir] || SPR.down, px, py);
-            }
-            ctx.restore();
-            // interact prompt
-            const s = nearSign();
-            if (s && started) {
-                ctx.fillStyle = 'rgba(43,29,20,0.9)';
-                ctx.fillRect(player.x - 26, player.y - 34, 52, 12);
-                ctx.fillStyle = '#ffec27';
-                ctx.fillText('[E] ' + s.label, player.x, player.y - 25);
-            }
-        }
-
-        (function loop() { update(); draw(); requestAnimationFrame(loop); })();
-    })();
-    </script>
-
-    <section class="w-full max-w-5xl px-6 mb-20">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            <div class="sv-panel py-5 px-3">
-                <div class="font-pixel text-sm text-svorange mb-2">3.68</div>
-                <div class="text-xl opacity-80">GPA</div>
-            </div>
-            <div class="sv-panel py-5 px-3">
-                <div class="font-pixel text-sm text-svgreen mb-2">+5</div>
-                <div class="text-xl opacity-80">Projects</div>
-            </div>
-            <div class="sv-panel py-5 px-3">
-                <div class="font-pixel text-sm text-svblue mb-2">+4</div>
-                <div class="text-xl opacity-80">Internships</div>
-            </div>
-            <div class="sv-panel py-5 px-3">
-                <div class="font-pixel text-sm text-svpink mb-2">25K+</div>
-                <div class="text-xl opacity-80">Records Mined</div>
-            </div>
+        <div class="go">→</div>
+      </a>
+      <a class="prow" href="https://github.com/medine1729/web3Project" target="_blank" rel="noopener">
+        <div class="num">03</div>
+        <div class="body">
+          <h3>WEB3 PROJECT</h3>
+          <div class="sub">Blockchain <span class="dot">•</span> dApps</div>
+          <span class="badge">▶ GITHUB</span>
         </div>
-    </section>
+        <div class="go">→</div>
+      </a>
+    </div>
+  </div>
+</section>
 
-    <section class="w-full max-w-5xl px-6 mb-20">
-        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-8">SKILLS</div>
-        <div class="sv-panel p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-            <div>
-                <div class="flex justify-between text-2xl mb-1"><span>Python</span><span class="text-svgreen">Lv. 9</span></div>
-                <div class="sv-bar"><div class="sv-fill bg-svgreen" style="width:92%"></div></div>
-            </div>
-            <div>
-                <div class="flex justify-between text-2xl mb-1"><span>Machine Learning</span><span class="text-svorange">Lv. 8</span></div>
-                <div class="sv-bar"><div class="sv-fill bg-svorange" style="width:85%"></div></div>
-            </div>
-            <div>
-                <div class="flex justify-between text-2xl mb-1"><span>SQL &amp; Databases</span><span class="text-svblue">Lv. 8</span></div>
-                <div class="sv-bar"><div class="sv-fill bg-svblue" style="width:80%"></div></div>
-            </div>
-            <div>
-                <div class="flex justify-between text-2xl mb-1"><span>C++ &amp; Embedded</span><span class="text-svpink">Lv. 7</span></div>
-                <div class="sv-bar"><div class="sv-fill bg-svpink" style="width:70%"></div></div>
-            </div>
+<!-- ============ EXPERIENCE ============ -->
+<section class="panel" id="experience">
+  <span class="doodad sq" style="top:14%;left:8%;background:var(--lime);border:3px solid var(--ink)"></span>
+  <div class="wrap">
+    <p class="kicker">// LOG_HISTORY</p>
+    <h2>EXP <span class="hl">POINTS</span></h2>
+    <div class="xp">
+      <div class="xrow">
+        <div class="yr">NOW</div>
+        <div>
+          <h3>DATA SCIENTIST &amp; AI DEV</h3>
+          <div class="org">Independent Projects</div>
+          <div class="desc">Machine learning, data science &amp; AI-focused development.</div>
         </div>
-    </section>
-
-    <section id="projects" class="w-full max-w-5xl px-6 mb-20">
-        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-3">PROJECTS</div>
-        <p class="text-xl opacity-70 mb-8">Click a project to read about it.</p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-
-            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
-                <img src="./assets/proj-trendai.png" alt="trendAI pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-pixel text-[10px]">trendAI</h3>
-                    <span class="text-lg text-svorange">★ BTK Hackathon</span>
-                </div>
-                <span class="proj-hint text-lg opacity-60">▼ click</span>
-                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
-                    <p class="text-xl mb-3">An AI recommendation system that analyzes e-commerce product trends with TensorFlow.</p>
-                    <a href="https://github.com/hackathonBTK2025/trendyAI" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
-                </div>
-            </div>
-
-            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
-                <img src="./assets/proj-chargemind.png" alt="ChargeMind pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-pixel text-[10px]">ChargeMind</h3>
-                    <span class="text-lg text-svgreen">2025 ~</span>
-                </div>
-                <span class="proj-hint text-lg opacity-60">▼ click</span>
-                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
-                    <p class="text-xl mb-3">An AI system that predicts usage patterns to optimize energy consumption and charging.</p>
-                    <a href="https://github.com/medine1729" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
-                </div>
-            </div>
-
-            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
-                <img src="./assets/proj-astrolis.png" alt="Astrolis pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-pixel text-[10px]">Astrolis</h3>
-                    <span class="text-lg text-svblue">Model Satellite</span>
-                </div>
-                <span class="proj-hint text-lg opacity-60">▼ click</span>
-                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
-                    <p class="text-xl mb-3">A Category-1 model satellite built with C++, Arduino and Raspberry Pi subsystems.</p>
-                </div>
-            </div>
-
-            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
-                <img src="./assets/proj-hepsiburada.png" alt="Hepsiburada Hackathon pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-pixel text-[10px]">Hepsiburada</h3>
-                    <span class="text-lg text-svorange">⚔ Hackathon</span>
-                </div>
-                <span class="proj-hint text-lg opacity-60">▼ click</span>
-                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
-                    <p class="text-xl mb-3">A team project built during Hepsiburada Hackathon 5.</p>
-                    <a href="https://github.com/medine1729/Hepsiburada-Hackathon5" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
-                </div>
-            </div>
-
-            <div class="proj sv-panel p-4" onclick="toggleProj(this)">
-                <img src="./assets/proj-web3.png" alt="Web3 project pixel art" class="pixelated-img w-full rounded-md border-[3px] border-wooddark mb-4">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-pixel text-[10px]">Web3 Project</h3>
-                    <span class="text-lg text-svpink">⛓ Chain</span>
-                </div>
-                <span class="proj-hint text-lg opacity-60">▼ click</span>
-                <div class="proj-desc mt-3 border-t-[3px] border-dashed border-wood pt-3">
-                    <p class="text-xl mb-3">Experiments with blockchain and decentralized applications.</p>
-                    <a href="https://github.com/medine1729/web3Project" target="_blank" onclick="event.stopPropagation()" class="sv-btn inline-block px-4 py-1 text-lg">GitHub →</a>
-                </div>
-            </div>
-
+      </div>
+      <div class="xrow">
+        <div class="yr">NOW</div>
+        <div>
+          <h3>B.SC. COMP ENG</h3>
+          <div class="org">University</div>
+          <div class="desc">Bachelor's degree student.</div>
         </div>
-    </section>
-
-    <section id="experience" class="w-full max-w-5xl px-6 mb-20">
-        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-8">QUEST LOG</div>
-
-        <div class="space-y-6">
-
-            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span class="font-pixel text-[10px] block mb-1">B.Sc. Computer Engineering</span>
-                    <span class="text-xl opacity-80">Muğla Sıtkı Koçman University · GPA 3.68 · 2023-2028</span>
-                </div>
-                <span class="text-2xl text-svgreen">▶ Active</span>
-            </div>
-
-            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span class="font-pixel text-[10px] block mb-1">Deneyap Mentor</span>
-                    <span class="text-xl opacity-80">Deneyap Türkiye · coding &amp; electronics workshops · 2024-2025</span>
-                </div>
-                <span class="text-2xl text-svorange">✔ Done</span>
-            </div>
-
-            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span class="font-pixel text-[10px] block mb-1">IT Intern</span>
-                    <span class="text-xl opacity-80">TNC Group · Python, Excel, AutoCAD, Photoshop · 2025</span>
-                </div>
-                <span class="text-2xl text-svorange">✔ Done</span>
-            </div>
-
-            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span class="font-pixel text-[10px] block mb-1">Data Mining Intern</span>
-                    <span class="text-xl opacity-80">CoCRM · scraped &amp; structured 25,000+ company records · 2024</span>
-                </div>
-                <span class="text-2xl text-svorange">✔ Done</span>
-            </div>
-
-            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span class="font-pixel text-[10px] block mb-1">Denizaşırı Online Intern</span>
-                    <span class="text-xl opacity-80">DenizBank · banking &amp; finance fundamentals · 2024</span>
-                </div>
-                <span class="text-2xl text-svorange">✔ Done</span>
-            </div>
-
-            <div class="sv-panel px-6 py-4 flex flex-wrap justify-between items-center gap-2">
-                <div>
-                    <span class="font-pixel text-[10px] block mb-1">Satellite Team Member</span>
-                    <span class="text-xl opacity-80">Astrolis · electronics &amp; software subsystems · 2024-2025</span>
-                </div>
-                <span class="text-2xl text-svorange">✔ Done</span>
-            </div>
-
+      </div>
+      <div class="xrow">
+        <div class="yr">EVENT</div>
+        <div>
+          <h3>HACKATHON</h3>
+          <div class="org">Hepsiburada Hackathon 5</div>
+          <div class="desc">Team project development.</div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section id="social" class="w-full max-w-5xl px-6 mb-20">
-        <div class="sv-sign inline-block px-6 py-3 font-pixel text-[11px] mb-8">BULLETIN BOARD</div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- ============ CONTACT ============ -->
+<section class="panel" id="contact">
+  <span class="doodad plus" style="top:16%;left:10%">+</span>
+  <span class="doodad plus" style="bottom:22%;right:10%;color:var(--pink)">+</span>
+  <svg class="doodad" style="top:12%;right:14%;color:var(--pink)" width="44" height="38"><use href="#pxheart" width="7" height="6" transform="scale(6)"/></svg>
+  <div class="wrap">
+    <p class="kicker">// READY_PLAYER_1</p>
+    <h2>LET'S <span class="hl">BUILD</span></h2>
+    <a class="mail" href="mailto:medinekaynak2906@gmail.com">medinekaynak2906@gmail.com</a>
+    <div class="socials">
+      <a href="https://www.linkedin.com/in/medinekaynak2906/" target="_blank" rel="noopener">LINKEDIN</a>
+      <a href="https://github.com/medine1729" target="_blank" rel="noopener">GITHUB</a>
+    </div>
+  </div>
+</section>
 
-            <a href="https://www.linkedin.com/in/medinekaynak2906/recent-activity/all/" target="_blank" class="sv-panel proj p-6 block">
-                <h3 class="font-pixel text-[10px] mb-3 text-[#0077b5]">in · LinkedIn Posts</h3>
-                <p class="text-xl opacity-80">Hackathons, projects and everything I share along the way.</p>
-            </a>
+<footer>© 2026 MEDINE KAYNAK — PRESS START</footer>
 
-            <a href="https://medium.com/@medinekaynak" target="_blank" class="sv-panel proj p-6 block">
-                <h3 class="font-pixel text-[10px] mb-3">M · Medium Articles</h3>
-                <p class="text-xl opacity-80">Writing on data science, machine learning and my journey.</p>
-            </a>
+<script>
+  // fade panels in/out as they enter/leave the viewport ("kaybolan ekranlar")
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      e.target.classList.toggle('in', e.isIntersecting && e.intersectionRatio > 0.3);
+    });
+  }, {threshold:[0, .3, .6]});
+  document.querySelectorAll('.panel').forEach(function(p){ io.observe(p); });
 
-        </div>
-    </section>
-
-    <footer id="contact" class="w-full max-w-5xl px-6 mb-24 text-center">
-        <div class="sv-panel inline-block px-10 py-8">
-            <h2 class="font-pixel text-sm md:text-base mb-5">BUILD TOGETHER<span class="blink">_</span></h2>
-            <p class="text-2xl mb-6">
-                <a href="mailto:medinekaynak2906@gmail.com" class="underline decoration-dotted underline-offset-4 hover:text-svorange transition">medinekaynak2906@gmail.com</a>
-            </p>
-            <a href="./assets/resume-example.pdf" target="_blank" class="sv-btn sv-btn-orange inline-block px-6 py-2 font-pixel text-[10px] mb-6">DOWNLOAD CV</a>
-            <div class="flex justify-center gap-5">
-                <a href="https://www.linkedin.com/in/medinekaynak2906/" target="_blank" class="sv-btn p-3" aria-label="LinkedIn">
-                    <svg class="w-6 h-6 fill-current text-[#0077b5]" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd"></path>
-                    </svg>
-                </a>
-                <a href="https://github.com/medine1729" target="_blank" class="sv-btn p-3" aria-label="GitHub">
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
-                    </svg>
-                </a>
-                <a href="https://medium.com/@medinekaynak" target="_blank" class="sv-btn p-3" aria-label="Medium">
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-        <div class="mt-8 text-xl opacity-60">
-            © 2026 Medine Kaynak · All rights reserved
-        </div>
-    </footer>
-
+  // active side-dot based on which panel fills the screen
+  var dots = document.querySelectorAll('nav.dots a');
+  var navIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting && e.intersectionRatio > 0.5){
+        dots.forEach(function(d){ d.classList.toggle('active', d.dataset.t === e.target.id); });
+      }
+    });
+  }, {threshold:[0.5]});
+  document.querySelectorAll('.panel').forEach(function(p){ navIO.observe(p); });
+</script>
 </body>
 </html>
