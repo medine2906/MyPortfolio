@@ -45,8 +45,14 @@
   }
   header .logo{font-family:'Press Start 2P';font-size:13px;color:var(--ink)}
   header .logo b{color:var(--pink)}
+  header .hbar{display:flex;align-items:center;gap:10px}
   header .status{font-family:'Press Start 2P';font-size:9px;color:var(--ink);
     background:var(--lime);border:3px solid var(--ink);padding:6px 8px;box-shadow:3px 3px 0 var(--ink)}
+  .sndbtn{font-family:'Press Start 2P';font-size:9px;color:var(--ink);cursor:pointer;
+    background:var(--white);border:3px solid var(--ink);padding:6px 8px;box-shadow:3px 3px 0 var(--ink);
+    transition:transform .1s,box-shadow .1s}
+  .sndbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+  .sndbtn.off{background:#d8d5c4;color:#8a8875;text-decoration:line-through}
 
   /* ---------- side dot nav ---------- */
   nav.dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:50;
@@ -195,7 +201,10 @@
 
 <header>
   <div class="logo">MEDINE<b>.EXE</b></div>
-  <div class="status">● ONLINE</div>
+  <div class="hbar">
+    <button id="sndbtn" class="sndbtn" aria-label="Toggle sound" title="Sound on/off">🔊 SFX</button>
+    <div class="status">● ONLINE</div>
+  </div>
 </header>
 
 <nav class="dots">
@@ -383,6 +392,62 @@
     });
   }, {threshold:[0.5]});
   document.querySelectorAll('.panel').forEach(function(p){ navIO.observe(p); });
+
+  /* ---------- 8-bit sound engine (Stardew-ish menu blips, synthesized) ---------- */
+  var SFX = (function(){
+    var ctx, muted = false;
+    function ac(){
+      if(!ctx){ var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return null; ctx = new AC(); }
+      if(ctx.state === 'suspended'){ ctx.resume(); }
+      return ctx;
+    }
+    // one square/triangle blip with a quick attack + exponential decay
+    function tone(freq, start, dur, type, vol){
+      var c = ac(); if(!c) return;
+      var o = c.createOscillator(), g = c.createGain();
+      o.type = type || 'square'; o.frequency.setValueAtTime(freq, c.currentTime + start);
+      o.connect(g); g.connect(c.destination);
+      var t = c.currentTime + start;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol || 0.15, t + 0.006);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.start(t); o.stop(t + dur + 0.03);
+    }
+    function play(fn){ if(muted) return; fn(); }
+    return {
+      // crisp two-step "select" blip
+      click:  function(){ play(function(){ tone(680,0,0.06,'square',0.18); tone(1040,0.055,0.07,'square',0.16); }); },
+      // soft short hover tick
+      hover:  function(){ play(function(){ tone(560,0,0.035,'triangle',0.06); }); },
+      // rising three-note "open/confirm" arpeggio
+      open:   function(){ play(function(){ tone(560,0,0.05,'square',0.14); tone(760,0.055,0.06,'square',0.14); tone(1040,0.12,0.09,'square',0.13); }); },
+      // low "back/close" blip
+      close:  function(){ play(function(){ tone(480,0,0.06,'square',0.14); tone(300,0.05,0.08,'square',0.13); }); },
+      toggle: function(){ muted = !muted; if(!muted){ this.click(); } return muted; }
+    };
+  })();
+
+  // mute button
+  var sb = document.getElementById('sndbtn');
+  sb.addEventListener('click', function(){
+    var m = SFX.toggle();
+    sb.classList.toggle('off', m);
+    sb.textContent = m ? '🔇 SFX' : '🔊 SFX';
+  });
+
+  // click blip on every button / link (skip the mute button itself)
+  document.querySelectorAll('a, .btn, button').forEach(function(el){
+    if(el.id === 'sndbtn' || el.classList.contains('prow')) return;
+    el.addEventListener('click', function(){ SFX.click(); });
+  });
+  // hover tick on interactive pixel elements
+  document.querySelectorAll('.btn, .prow, nav.dots a, .socials a, .trait, .mail').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ SFX.hover(); });
+  });
+  // richer "open" chime specifically for project rows
+  document.querySelectorAll('.prow').forEach(function(el){
+    el.addEventListener('click', function(){ SFX.open(); });
+  });
 </script>
 </body>
 </html>
