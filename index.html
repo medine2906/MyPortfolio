@@ -132,8 +132,14 @@
   .trait .ic.pk{background:var(--pink)}
   .trait .nm{font-family:'Press Start 2P';font-size:8px;line-height:1.6}
 
+  /* tall panels flow past one screen instead of vertically centering */
+  .panel.tall{align-items:flex-start}
   /* projects list */
-  .plist{display:flex;flex-direction:column;gap:16px}
+  .plist{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .allrepos{display:inline-block;margin-top:20px;font-family:'Press Start 2P';font-size:10px;
+    background:var(--ink);color:var(--lime);border:3px solid var(--ink);padding:12px 14px;
+    box-shadow:var(--shadow);text-decoration:none;transition:transform .1s,box-shadow .1s}
+  .allrepos:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
   .prow{display:flex;align-items:center;gap:18px;background:var(--white);
     border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:16px;
     text-decoration:none;color:var(--ink);transition:transform .1s,box-shadow .1s}
@@ -182,6 +188,7 @@
     .xrow{flex-direction:column;gap:6px}
     .xrow .yr{flex-basis:auto}
     #hero .idcard{flex-basis:260px}
+    .plist{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -283,40 +290,175 @@
 </section>
 
 <!-- ============ PROJECTS ============ -->
-<section class="panel" id="projects">
+<section class="panel tall" id="projects">
   <span class="doodad plus" style="bottom:10%;right:6%">+</span>
   <div class="wrap">
-    <p class="kicker">// AVAILABLE_NOW</p>
+    <p class="kicker">// ALL_PROJECTS.dir</p>
     <h2>SELECTED <span class="hl">PROJECTS</span></h2>
     <div class="plist">
-      <a class="prow" href="https://github.com/medine1729/trendAI" target="_blank" rel="noopener">
+
+      <a class="prow" href="https://github.com/medine2906/trendAI" target="_blank" rel="noopener">
         <div class="num">01</div>
         <div class="body">
           <h3>trendAI</h3>
-          <div class="sub">AI trend analysis <span class="dot">•</span> Python <span class="dot">•</span> ML</div>
+          <div class="sub">AI trend analysis <span class="dot">•</span> ML</div>
           <span class="badge">▶ GITHUB</span>
         </div>
         <div class="go">→</div>
       </a>
-      <a class="prow" href="https://github.com/medine1729/Hepsiburada-Hackathon5" target="_blank" rel="noopener">
+
+      <a class="prow" href="https://github.com/medine2906/trendaiows" target="_blank" rel="noopener">
         <div class="num">02</div>
         <div class="body">
-          <h3>HEPSIBURADA</h3>
-          <div class="sub">Hackathon 5 <span class="dot">•</span> Team project</div>
+          <h3>trendAI OWS</h3>
+          <div class="sub">trendAI web build <span class="dot">•</span> TypeScript</div>
+          <span class="badge">▶ GITHUB</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/deepSwap" target="_blank" rel="noopener">
+        <div class="num">03</div>
+        <div class="body">
+          <h3>deepSwap</h3>
+          <div class="sub">Crypto swap app <span class="dot">•</span> JavaScript</div>
+          <span class="badge">▶ GITHUB</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/monad-purchase" target="_blank" rel="noopener">
+        <div class="num">04</div>
+        <div class="body">
+          <h3>monad-purchase</h3>
+          <div class="sub">On-chain purchase contract <span class="dot">•</span> Move</div>
+          <span class="badge">▶ MONAD</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/web3Project" target="_blank" rel="noopener">
+        <div class="num">05</div>
+        <div class="body">
+          <h3>web3Project</h3>
+          <div class="sub">Smart contracts <span class="dot">•</span> Solidity</div>
+          <span class="badge">▶ GITHUB</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/trustchain-frontend" target="_blank" rel="noopener">
+        <div class="num">06</div>
+        <div class="body">
+          <h3>TrustChain</h3>
+          <div class="sub">Frontend <span class="dot">•</span> JavaScript</div>
+          <span class="badge">▶ GITHUB</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/MonGo" target="_blank" rel="noopener">
+        <div class="num">07</div>
+        <div class="body">
+          <h3>MonGo</h3>
+          <div class="sub">Web app <span class="dot">•</span> TypeScript</div>
+          <span class="badge">▶ GITHUB</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://seesaw-three.vercel.app" target="_blank" rel="noopener">
+        <div class="num">08</div>
+        <div class="body">
+          <h3>Seesaw</h3>
+          <div class="sub">Web app <span class="dot">•</span> TypeScript</div>
+          <span class="badge">▶ LIVE DEMO</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/property-listing-ai-agent" target="_blank" rel="noopener">
+        <div class="num">09</div>
+        <div class="body">
+          <h3>Property AI Agent</h3>
+          <div class="sub">AI agent for property listings</div>
+          <span class="badge">▶ AI AGENT</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/whatsapp_summary_bot" target="_blank" rel="noopener">
+        <div class="num">10</div>
+        <div class="body">
+          <h3>WhatsApp Summary Bot</h3>
+          <div class="sub">Chat summarizer <span class="dot">•</span> Python</div>
+          <span class="badge">▶ PYTHON</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/PCT_Biosensor_Analiz" target="_blank" rel="noopener">
+        <div class="num">11</div>
+        <div class="body">
+          <h3>PCT Biosensor</h3>
+          <div class="sub">Rct analysis from EIS data <span class="dot">•</span> Python</div>
+          <span class="badge">▶ PYTHON</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/newPCT" target="_blank" rel="noopener">
+        <div class="num">12</div>
+        <div class="body">
+          <h3>newPCT</h3>
+          <div class="sub">PCT biosensor project <span class="dot">•</span> Python</div>
+          <span class="badge">▶ PYTHON</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/XXXHACKTHON" target="_blank" rel="noopener">
+        <div class="num">13</div>
+        <div class="body">
+          <h3>XXXHACKTHON</h3>
+          <div class="sub">Hackathon project <span class="dot">•</span> Python</div>
           <span class="badge">▶ HACKATHON</span>
         </div>
         <div class="go">→</div>
       </a>
-      <a class="prow" href="https://github.com/medine1729/web3Project" target="_blank" rel="noopener">
-        <div class="num">03</div>
+
+      <a class="prow" href="https://github.com/medine2906/Patika" target="_blank" rel="noopener">
+        <div class="num">14</div>
         <div class="body">
-          <h3>WEB3 PROJECT</h3>
-          <div class="sub">Blockchain <span class="dot">•</span> dApps</div>
+          <h3>Patika</h3>
+          <div class="sub">Coursework &amp; exercises <span class="dot">•</span> Python</div>
+          <span class="badge">▶ PYTHON</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/space-vista-medine" target="_blank" rel="noopener">
+        <div class="num">15</div>
+        <div class="body">
+          <h3>Space Vista</h3>
+          <div class="sub">Space-themed web project <span class="dot">•</span> JavaScript</div>
           <span class="badge">▶ GITHUB</span>
         </div>
         <div class="go">→</div>
       </a>
+
+      <a class="prow" href="https://github.com/medine2906/c-foundations" target="_blank" rel="noopener">
+        <div class="num">16</div>
+        <div class="body">
+          <h3>c-foundations</h3>
+          <div class="sub">C programming foundations</div>
+          <span class="badge">▶ C</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
     </div>
+    <a class="allrepos" href="https://github.com/medine2906?tab=repositories" target="_blank" rel="noopener">▶ SEE ALL REPOS ON GITHUB →</a>
   </div>
 </section>
 
