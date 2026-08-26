@@ -140,6 +140,43 @@
     background:var(--ink);color:var(--lime);border:3px solid var(--ink);padding:12px 14px;
     box-shadow:var(--shadow);text-decoration:none;transition:transform .1s,box-shadow .1s}
   .allrepos:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
+  .badge.live{background:var(--lime);color:var(--ink)}
+
+  /* ---------- live demo modal ---------- */
+  .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+    padding:20px;background:rgba(20,20,20,.72)}
+  .modal.open{display:flex;animation:pop .18s steps(3)}
+  @keyframes pop{from{opacity:0}to{opacity:1}}
+  .modal-box{width:100%;max-width:1000px;background:var(--cream);border:4px solid var(--ink);
+    box-shadow:12px 12px 0 rgba(20,20,20,.5);display:flex;flex-direction:column;max-height:90vh}
+  .winbar{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--ink);border-bottom:4px solid var(--ink)}
+  .dots3{display:flex;gap:6px;flex:0 0 auto}
+  .dots3 span{width:13px;height:13px;border:2px solid var(--cream);display:block}
+  .dots3 span:nth-child(1){background:var(--pink)}
+  .dots3 span:nth-child(2){background:var(--lime)}
+  .dots3 span:nth-child(3){background:var(--white)}
+  .urlbar{flex:1 1 auto;min-width:0;font-family:'VT323',monospace;font-size:19px;color:var(--lime);
+    background:#0c0c0c;border:2px solid #3a3a3a;padding:4px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .xbtn{flex:0 0 auto;font-family:'Press Start 2P';font-size:11px;color:var(--ink);cursor:pointer;
+    background:var(--pink);border:3px solid var(--cream);padding:6px 9px}
+  .xbtn:active{transform:translate(2px,2px)}
+  .screen{position:relative;flex:1 1 auto;min-height:60vh;background:var(--white)}
+  #m-frame{width:100%;height:60vh;border:0;display:block;background:var(--white)}
+  .nodemo{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:14px;padding:30px;background:var(--cream)}
+  .nodemo.show{display:flex}
+  #m-frame.hide{display:none}
+  .nd-heart{font-family:'Press Start 2P';font-size:26px;color:var(--pink)}
+  .nodemo h3{font-family:'Press Start 2P';font-size:16px}
+  .nodemo p{font-size:22px;max-width:520px;color:#444}
+  .nd-note{font-family:'Press Start 2P';font-size:10px;color:var(--ink);background:var(--lime);
+    border:3px solid var(--ink);padding:10px 12px;box-shadow:4px 4px 0 var(--ink)}
+  .modal-foot{display:flex;gap:12px;flex-wrap:wrap;padding:14px;border-top:4px solid var(--ink);background:var(--cream)}
+  @media(max-width:640px){
+    .screen{min-height:54vh}
+    #m-frame{height:54vh}
+    .urlbar{font-size:15px}
+  }
   .prow{display:flex;align-items:center;gap:18px;background:var(--white);
     border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:16px;
     text-decoration:none;color:var(--ink);transition:transform .1s,box-shadow .1s}
@@ -297,7 +334,7 @@
     <h2>SELECTED <span class="hl">PROJECTS</span></h2>
     <div class="plist">
 
-      <a class="prow" href="https://github.com/medine2906/trendAI" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/trendAI" data-name="trendAI" data-desc="Analyzes trends and makes predictions using machine learning." data-code="https://github.com/medine2906/trendAI" data-live="" target="_blank" rel="noopener">
         <div class="num">01</div>
         <div class="body">
           <h3>trendAI</h3>
@@ -307,7 +344,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/trendaiows" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/trendaiows" data-name="trendAI OWS" data-desc="A TypeScript web build of the trendAI trend-analysis project." data-code="https://github.com/medine2906/trendaiows" data-live="" target="_blank" rel="noopener">
         <div class="num">02</div>
         <div class="body">
           <h3>trendAI OWS</h3>
@@ -317,7 +354,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/deepSwap" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/deepSwap" data-name="deepSwap" data-desc="A JavaScript app for swapping crypto tokens." data-code="https://github.com/medine2906/deepSwap" data-live="" target="_blank" rel="noopener">
         <div class="num">03</div>
         <div class="body">
           <h3>deepSwap</h3>
@@ -327,7 +364,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/monad-purchase" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/monad-purchase" data-name="monad-purchase" data-desc="A Move smart contract handling on-chain purchases on Monad." data-code="https://github.com/medine2906/monad-purchase" data-live="" target="_blank" rel="noopener">
         <div class="num">04</div>
         <div class="body">
           <h3>monad-purchase</h3>
@@ -337,7 +374,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/web3Project" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/web3Project" data-name="web3Project" data-desc="Solidity smart contracts exploring blockchain and dApps." data-code="https://github.com/medine2906/web3Project" data-live="" target="_blank" rel="noopener">
         <div class="num">05</div>
         <div class="body">
           <h3>web3Project</h3>
@@ -347,7 +384,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/trustchain-frontend" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/trustchain-frontend" data-name="TrustChain" data-desc="The JavaScript frontend for the TrustChain project." data-code="https://github.com/medine2906/trustchain-frontend" data-live="" target="_blank" rel="noopener">
         <div class="num">06</div>
         <div class="body">
           <h3>TrustChain</h3>
@@ -357,7 +394,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/MonGo" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/MonGo" data-name="MonGo" data-desc="A web application built with TypeScript." data-code="https://github.com/medine2906/MonGo" data-live="" target="_blank" rel="noopener">
         <div class="num">07</div>
         <div class="body">
           <h3>MonGo</h3>
@@ -367,17 +404,17 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://seesaw-three.vercel.app" target="_blank" rel="noopener">
+      <a class="prow" href="https://seesaw-three.vercel.app" data-name="Seesaw" data-desc="A TypeScript web app deployed live on Vercel." data-code="https://github.com/medine2906/Seesaw" data-live="https://seesaw-three.vercel.app" target="_blank" rel="noopener">
         <div class="num">08</div>
         <div class="body">
           <h3>Seesaw</h3>
           <div class="sub">A TypeScript web app deployed live on Vercel.</div>
-          <span class="badge">▶ LIVE DEMO</span>
+          <span class="badge live">▶ LIVE DEMO</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/property-listing-ai-agent" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/property-listing-ai-agent" data-name="Property AI Agent" data-desc="An AI agent that works with real-estate property listings." data-code="https://github.com/medine2906/property-listing-ai-agent" data-live="" target="_blank" rel="noopener">
         <div class="num">09</div>
         <div class="body">
           <h3>Property AI Agent</h3>
@@ -387,7 +424,7 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/PCT_Biosensor_Analiz" target="_blank" rel="noopener">
+      <a class="prow" href="https://github.com/medine2906/PCT_Biosensor_Analiz" data-name="PCT Biosensor" data-desc="A Python tool that computes Rct from EIS data for biosensor analysis." data-code="https://github.com/medine2906/PCT_Biosensor_Analiz" data-live="" target="_blank" rel="noopener">
         <div class="num">10</div>
         <div class="body">
           <h3>PCT Biosensor</h3>
@@ -454,6 +491,30 @@
 </section>
 
 <footer>© 2026 MEDINE KAYNAK — PRESS START</footer>
+
+<!-- ============ LIVE DEMO MODAL ============ -->
+<div id="demo" class="modal" aria-hidden="true">
+  <div class="modal-box">
+    <div class="winbar">
+      <div class="dots3"><span></span><span></span><span></span></div>
+      <div class="urlbar" id="m-url">demo</div>
+      <button class="xbtn" id="m-close" aria-label="Close">✕</button>
+    </div>
+    <div class="screen" id="m-screen">
+      <iframe id="m-frame" title="Live demo" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" referrerpolicy="no-referrer"></iframe>
+      <div class="nodemo" id="m-nodemo">
+        <div class="nd-heart">◆</div>
+        <h3 id="m-name">PROJECT</h3>
+        <p id="m-desc">description</p>
+        <p class="nd-note">▶ No live demo deployed yet — check out the source code.</p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <a class="btn primary" id="m-live" href="#" target="_blank" rel="noopener" style="display:none">OPEN LIVE ↗</a>
+      <a class="btn ghost" id="m-code" href="#" target="_blank" rel="noopener">VIEW CODE ↗</a>
+    </div>
+  </div>
+</div>
 
 <script>
   // fade panels in/out as they enter/leave the viewport ("kaybolan ekranlar")
@@ -526,10 +587,62 @@
   document.querySelectorAll('.btn, .prow, nav.dots a, .socials a, .trait, .mail').forEach(function(el){
     el.addEventListener('mouseenter', function(){ SFX.hover(); });
   });
-  // richer "open" chime specifically for project rows
+  /* ---------- live demo modal ---------- */
+  var modal   = document.getElementById('demo');
+  var mFrame  = document.getElementById('m-frame');
+  var mNode   = document.getElementById('m-nodemo');
+  var mUrl    = document.getElementById('m-url');
+  var mName   = document.getElementById('m-name');
+  var mDesc   = document.getElementById('m-desc');
+  var mLive   = document.getElementById('m-live');
+  var mCode   = document.getElementById('m-code');
+
+  function openDemo(d){
+    mName.textContent = d.name || 'PROJECT';
+    mDesc.textContent = d.desc || '';
+    mCode.href = d.code || '#';
+    if(d.live){
+      mUrl.textContent = d.live.replace(/^https?:\/\//,'');
+      mFrame.src = d.live;
+      mFrame.classList.remove('hide');
+      mNode.classList.remove('show');
+      mLive.href = d.live; mLive.style.display = '';
+    } else {
+      mUrl.textContent = (d.name || 'demo').toLowerCase() + '.exe';
+      mFrame.removeAttribute('src');
+      mFrame.classList.add('hide');
+      mNode.classList.add('show');
+      mLive.style.display = 'none';
+    }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDemo(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    mFrame.removeAttribute('src'); // stop the live page
+    document.body.style.overflow = '';
+    SFX.close();
+  }
+
+  // project rows: open the in-page demo modal instead of navigating away
   document.querySelectorAll('.prow').forEach(function(el){
-    el.addEventListener('click', function(){ SFX.open(); });
+    el.addEventListener('click', function(ev){
+      ev.preventDefault();
+      SFX.open();
+      openDemo({
+        name: el.getAttribute('data-name'),
+        desc: el.getAttribute('data-desc'),
+        code: el.getAttribute('data-code'),
+        live: el.getAttribute('data-live')
+      });
+    });
   });
+
+  document.getElementById('m-close').addEventListener('click', closeDemo);
+  modal.addEventListener('click', function(ev){ if(ev.target === modal) closeDemo(); });
+  document.addEventListener('keydown', function(ev){ if(ev.key === 'Escape' && modal.classList.contains('open')) closeDemo(); });
 </script>
 </body>
 </html>
