@@ -172,12 +172,21 @@
   .xbtn{flex:0 0 auto;font-family:'Press Start 2P';font-size:11px;color:var(--ink);cursor:pointer;
     background:var(--pink);border:3px solid var(--cream);padding:6px 9px}
   .xbtn:active{transform:translate(2px,2px)}
-  .screen{position:relative;flex:1 1 auto;min-height:60vh;background:var(--white)}
-  #m-frame{width:100%;height:60vh;border:0;display:block;background:var(--white)}
+  .screen{position:relative;flex:1 1 auto;min-height:60vh;background:var(--white);overflow:hidden}
+  #m-shotlink{display:block;width:100%;height:60vh;position:relative}
+  #m-shot{width:100%;height:60vh;object-fit:cover;object-position:top center;display:block;background:var(--white)}
+  #m-shotlink.hide{display:none}
+  .shotcta{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
+    font-family:'Press Start 2P';font-size:10px;color:var(--ink);background:var(--lime);
+    border:3px solid var(--ink);padding:9px 12px;box-shadow:4px 4px 0 var(--ink);
+    opacity:0;transition:opacity .15s;white-space:nowrap}
+  #m-shotlink:hover .shotcta{opacity:1}
+  .shotload{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    font-family:'Press Start 2P';font-size:12px;color:#8a8875;background:var(--white)}
+  .shotload.show{display:flex}
   .nodemo{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
     text-align:center;gap:14px;padding:30px;background:var(--cream)}
   .nodemo.show{display:flex}
-  #m-frame.hide{display:none}
   .nd-heart{font-family:'Press Start 2P';font-size:26px;color:var(--pink)}
   .nodemo h3{font-family:'Press Start 2P';font-size:16px}
   .nodemo p{font-size:22px;max-width:520px;color:#444}
@@ -596,18 +605,22 @@
       <button class="xbtn" id="m-close" aria-label="Close">✕</button>
     </div>
     <div class="screen" id="m-screen">
-      <iframe id="m-frame" title="Live demo" sandbox="allow-scripts allow-same-origin allow-popups allow-forms" referrerpolicy="no-referrer"></iframe>
+      <a id="m-shotlink" href="#" target="_blank" rel="noopener" title="Open live site">
+        <img id="m-shot" alt="Live site preview" referrerpolicy="no-referrer">
+        <span class="shotcta">▶ CLICK TO OPEN LIVE ↗</span>
+      </a>
+      <div class="shotload" id="m-load">▓ LOADING PREVIEW…</div>
       <div class="nodemo" id="m-nodemo">
         <div class="nd-heart">◆</div>
         <h3 id="m-name">PROJECT</h3>
         <p id="m-desc">description</p>
-        <p class="nd-note">▶ No live demo deployed yet — check out the source code.</p>
+        <p class="nd-note" id="m-note">▶ No live demo deployed yet — check out the source code.</p>
       </div>
     </div>
     <div class="modal-foot">
       <a class="btn primary" id="m-live" href="#" target="_blank" rel="noopener" style="display:none">OPEN LIVE ↗</a>
       <a class="btn ghost" id="m-code" href="#" target="_blank" rel="noopener">VIEW CODE ↗</a>
-      <span class="framehint" id="m-hint">Preview blank? The site blocks embedding — hit OPEN LIVE ↗</span>
+      <span class="framehint" id="m-hint">Live screenshot preview — click it or OPEN LIVE ↗ for the real site.</span>
     </div>
   </div>
 </div>
@@ -700,16 +713,50 @@
     });
   });
 
-  /* ---------- live demo modal ---------- */
-  var modal   = document.getElementById('demo');
-  var mFrame  = document.getElementById('m-frame');
-  var mNode   = document.getElementById('m-nodemo');
-  var mUrl    = document.getElementById('m-url');
-  var mName   = document.getElementById('m-name');
-  var mDesc   = document.getElementById('m-desc');
-  var mLive   = document.getElementById('m-live');
-  var mCode   = document.getElementById('m-code');
-  var mHint   = document.getElementById('m-hint');
+  /* ---------- live demo modal (screenshot preview) ---------- */
+  var modal    = document.getElementById('demo');
+  var mShot    = document.getElementById('m-shot');
+  var mShotLnk = document.getElementById('m-shotlink');
+  var mLoad    = document.getElementById('m-load');
+  var mNode    = document.getElementById('m-nodemo');
+  var mUrl     = document.getElementById('m-url');
+  var mName    = document.getElementById('m-name');
+  var mDesc    = document.getElementById('m-desc');
+  var mLive    = document.getElementById('m-live');
+  var mCode    = document.getElementById('m-code');
+  var mHint    = document.getElementById('m-hint');
+  var mNote    = document.getElementById('m-note');
+  var shotStage = 0; // which screenshot service we're trying
+
+  // build a screenshot URL for a live site (no API key needed)
+  function shotSrc(url, stage){
+    if(stage === 0) return 'https://image.thum.io/get/width/1200/crop/1500/noanimate/' + url;
+    return 'https://s.wordpress.com/mshots/v1/' + encodeURIComponent(url) + '?w=1200';
+  }
+
+  // show the info panel instead of a preview (no demo, or screenshot failed)
+  function showPanel(name, desc, note, liveUrl){
+    mName.textContent = name || 'PROJECT';
+    mDesc.textContent = desc || '';
+    mNote.textContent = note;
+    mShotLnk.classList.add('hide');
+    mLoad.classList.remove('show');
+    mNode.classList.add('show');
+    mHint.classList.remove('show');
+    if(liveUrl){ mLive.href = liveUrl; mLive.style.display = ''; }
+    else { mLive.style.display = 'none'; }
+  }
+
+  mShot.addEventListener('load', function(){ mLoad.classList.remove('show'); });
+  mShot.addEventListener('error', function(){
+    if(shotStage === 0){ // first service failed, try the fallback service
+      shotStage = 1;
+      mShot.src = shotSrc(mShot.getAttribute('data-live'), 1);
+    } else {            // both failed — show the info panel
+      showPanel(mShot.getAttribute('data-name'), mShot.getAttribute('data-desc'),
+                '▶ Preview unavailable — open the site live in a new tab.', mShot.getAttribute('data-live'));
+    }
+  });
 
   function openDemo(d){
     mName.textContent = d.name || 'PROJECT';
@@ -717,18 +764,21 @@
     mCode.href = d.code || '#';
     if(d.live){
       mUrl.textContent = d.live.replace(/^https?:\/\//,'');
-      mFrame.src = d.live;
-      mFrame.classList.remove('hide');
-      mNode.classList.remove('show');
       mLive.href = d.live; mLive.style.display = '';
+      mShotLnk.href = d.live;
       mHint.classList.add('show');
+      mNode.classList.remove('show');
+      mShotLnk.classList.remove('hide');
+      mLoad.classList.add('show');
+      shotStage = 0;
+      mShot.setAttribute('data-live', d.live);
+      mShot.setAttribute('data-name', d.name || '');
+      mShot.setAttribute('data-desc', d.desc || '');
+      mShot.src = shotSrc(d.live, 0);
     } else {
       mUrl.textContent = (d.name || 'demo').toLowerCase() + '.exe';
-      mFrame.removeAttribute('src');
-      mFrame.classList.add('hide');
-      mNode.classList.add('show');
-      mLive.style.display = 'none';
-      mHint.classList.remove('show');
+      mShot.removeAttribute('src');
+      showPanel(d.name, d.desc, '▶ No live demo deployed yet — check out the source code.', '');
     }
     modal.classList.add('open');
     modal.setAttribute('aria-hidden','false');
@@ -737,7 +787,7 @@
   function closeDemo(){
     modal.classList.remove('open');
     modal.setAttribute('aria-hidden','true');
-    mFrame.removeAttribute('src'); // stop the live page
+    mShot.removeAttribute('src');
     document.body.style.overflow = '';
     SFX.close();
   }
