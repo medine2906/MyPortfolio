@@ -140,7 +140,19 @@
     background:var(--ink);color:var(--lime);border:3px solid var(--ink);padding:12px 14px;
     box-shadow:var(--shadow);text-decoration:none;transition:transform .1s,box-shadow .1s}
   .allrepos:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--ink)}
-  .badge.live{background:var(--lime);color:var(--ink)}
+  .prow .body .badge.live{background:var(--lime);color:var(--ink)}
+  .prow .body .badge.soon{background:#d8d5c4;color:#5a5847}
+  .prow .body .badge.fork{background:var(--white);color:var(--ink)}
+
+  /* filter bar */
+  .filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+  .filt{font-family:'Press Start 2P';font-size:9px;color:var(--ink);cursor:pointer;
+    background:var(--white);border:3px solid var(--ink);padding:9px 11px;box-shadow:3px 3px 0 var(--ink);
+    transition:transform .08s,box-shadow .08s}
+  .filt:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .filt.on{background:var(--pink);color:var(--white)}
+  .filt.on:hover{transform:none}
+  .prow.hide{display:none}
 
   /* ---------- live demo modal ---------- */
   .modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
@@ -332,40 +344,101 @@
   <div class="wrap">
     <p class="kicker">// ALL_PROJECTS.dir</p>
     <h2>SELECTED <span class="hl">PROJECTS</span></h2>
+
+    <div class="filters" id="filters">
+      <button class="filt on" data-f="all">ALL</button>
+      <button class="filt" data-f="live">● LIVE</button>
+      <button class="filt" data-f="ai">AI / ML</button>
+      <button class="filt" data-f="blockchain">BLOCKCHAIN</button>
+      <button class="filt" data-f="web">WEB</button>
+      <button class="filt" data-f="data">DATA</button>
+      <button class="filt" data-f="opensource">OPEN SOURCE</button>
+    </div>
+
     <div class="plist">
 
-      <a class="prow" href="https://github.com/medine2906/trendAI" data-name="trendAI" data-desc="Analyzes trends and makes predictions using machine learning." data-code="https://github.com/medine2906/trendAI" data-live="" target="_blank" rel="noopener">
+      <a class="prow" href="http://trendyai2-dh86.vercel.app/" data-cat="ai" data-name="trendAI" data-desc="Analyzes trends and makes predictions using machine learning." data-code="https://github.com/medine2906/trendyai2" data-live="http://trendyai2-dh86.vercel.app/" target="_blank" rel="noopener">
         <div class="num">01</div>
         <div class="body">
           <h3>trendAI</h3>
           <div class="sub">Analyzes trends and makes predictions using machine learning.</div>
-          <span class="badge">▶ AI / ML</span>
+          <span class="badge live">● LIVE</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/trendaiows" data-name="trendAI OWS" data-desc="A TypeScript web build of the trendAI trend-analysis project." data-code="https://github.com/medine2906/trendaiows" data-live="" target="_blank" rel="noopener">
+      <a class="prow" href="https://gridpay-9p98.vercel.app/" data-cat="web" data-name="gridpay" data-desc="A web-based payments app." data-code="https://github.com/medine2906/gridpay" data-live="https://gridpay-9p98.vercel.app/" target="_blank" rel="noopener">
         <div class="num">02</div>
         <div class="body">
-          <h3>trendAI OWS</h3>
-          <div class="sub">A TypeScript web build of the trendAI trend-analysis project.</div>
-          <span class="badge">▶ TYPESCRIPT</span>
+          <h3>gridpay</h3>
+          <div class="sub">A web-based payments app.</div>
+          <span class="badge live">● LIVE</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/deepSwap" data-name="deepSwap" data-desc="A JavaScript app for swapping crypto tokens." data-code="https://github.com/medine2906/deepSwap" data-live="" target="_blank" rel="noopener">
+      <a class="prow" href="https://chess-rho-sable.vercel.app/" data-cat="web" data-name="chess" data-desc="A playable chess game in the browser." data-code="https://github.com/medine2906/chess" data-live="https://chess-rho-sable.vercel.app/" target="_blank" rel="noopener">
         <div class="num">03</div>
+        <div class="body">
+          <h3>chess</h3>
+          <div class="sub">A playable chess game in the browser.</div>
+          <span class="badge live">● LIVE</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://lifecycle-crm-not-service.vercel.app/" data-cat="web" data-name="Lifecycle CRM" data-desc="A CRM web app for managing customer lifecycles." data-code="https://github.com/medine2906/lifecycleCrmNotService" data-live="https://lifecycle-crm-not-service.vercel.app/" target="_blank" rel="noopener">
+        <div class="num">04</div>
+        <div class="body">
+          <h3>Lifecycle CRM</h3>
+          <div class="sub">A CRM web app for managing customer lifecycles.</div>
+          <span class="badge live">● LIVE</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://nestly-tinder-estate.vercel.app/" data-cat="ai web" data-name="Nestly" data-desc="A Tinder-style AI agent for browsing real-estate listings." data-code="https://github.com/medine2906/property-listing-ai-agent" data-live="https://nestly-tinder-estate.vercel.app/" target="_blank" rel="noopener">
+        <div class="num">05</div>
+        <div class="body">
+          <h3>Nestly</h3>
+          <div class="sub">A Tinder-style AI agent for browsing real-estate listings.</div>
+          <span class="badge live">● LIVE</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://frontend-delta-one-57.vercel.app" data-cat="web" data-name="MonGo" data-desc="A TypeScript web app frontend." data-code="https://github.com/medine2906/MonGo" data-live="https://frontend-delta-one-57.vercel.app" target="_blank" rel="noopener">
+        <div class="num">06</div>
+        <div class="body">
+          <h3>MonGo</h3>
+          <div class="sub">A TypeScript web app frontend.</div>
+          <span class="badge live">● LIVE</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://seesaw-three.vercel.app" data-cat="web" data-name="Seesaw" data-desc="A TypeScript web app deployed live on Vercel." data-code="https://github.com/medine2906/Seesaw" data-live="https://seesaw-three.vercel.app" target="_blank" rel="noopener">
+        <div class="num">07</div>
+        <div class="body">
+          <h3>Seesaw</h3>
+          <div class="sub">A TypeScript web app deployed live on Vercel.</div>
+          <span class="badge live">● LIVE</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/deepSwap" data-cat="blockchain web" data-name="deepSwap" data-desc="A JavaScript app for swapping crypto tokens." data-code="https://github.com/medine2906/deepSwap" data-live="" target="_blank" rel="noopener">
+        <div class="num">08</div>
         <div class="body">
           <h3>deepSwap</h3>
           <div class="sub">A JavaScript app for swapping crypto tokens.</div>
-          <span class="badge">▶ JAVASCRIPT</span>
+          <span class="badge">▶ BLOCKCHAIN</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/monad-purchase" data-name="monad-purchase" data-desc="A Move smart contract handling on-chain purchases on Monad." data-code="https://github.com/medine2906/monad-purchase" data-live="" target="_blank" rel="noopener">
-        <div class="num">04</div>
+      <a class="prow" href="https://github.com/medine2906/monad-purchase" data-cat="blockchain" data-name="monad-purchase" data-desc="A Move smart contract handling on-chain purchases on Monad." data-code="https://github.com/medine2906/monad-purchase" data-live="" target="_blank" rel="noopener">
+        <div class="num">09</div>
         <div class="body">
           <h3>monad-purchase</h3>
           <div class="sub">A Move smart contract handling on-chain purchases on Monad.</div>
@@ -374,8 +447,8 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/web3Project" data-name="web3Project" data-desc="Solidity smart contracts exploring blockchain and dApps." data-code="https://github.com/medine2906/web3Project" data-live="" target="_blank" rel="noopener">
-        <div class="num">05</div>
+      <a class="prow" href="https://github.com/medine2906/web3Project" data-cat="blockchain" data-name="web3Project" data-desc="Solidity smart contracts exploring blockchain and dApps." data-code="https://github.com/medine2906/web3Project" data-live="" target="_blank" rel="noopener">
+        <div class="num">10</div>
         <div class="body">
           <h3>web3Project</h3>
           <div class="sub">Solidity smart contracts exploring blockchain and dApps.</div>
@@ -384,52 +457,72 @@
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/trustchain-frontend" data-name="TrustChain" data-desc="The JavaScript frontend for the TrustChain project." data-code="https://github.com/medine2906/trustchain-frontend" data-live="" target="_blank" rel="noopener">
-        <div class="num">06</div>
+      <a class="prow" href="https://github.com/medine2906/trustchain-frontend" data-cat="blockchain web" data-name="TrustChain" data-desc="The frontend for the TrustChain project." data-code="https://github.com/medine2906/trustchain-frontend" data-live="" target="_blank" rel="noopener">
+        <div class="num">11</div>
         <div class="body">
           <h3>TrustChain</h3>
-          <div class="sub">The JavaScript frontend for the TrustChain project.</div>
-          <span class="badge">▶ JAVASCRIPT</span>
+          <div class="sub">The frontend for the TrustChain project.</div>
+          <span class="badge">▶ BLOCKCHAIN</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/MonGo" data-name="MonGo" data-desc="A web application built with TypeScript." data-code="https://github.com/medine2906/MonGo" data-live="" target="_blank" rel="noopener">
-        <div class="num">07</div>
+      <a class="prow" href="https://github.com/medine2906/sui-agent-pay" data-cat="blockchain" data-name="sui-agent-pay" data-desc="An agent-payment project on the Sui blockchain — site coming soon." data-code="https://github.com/medine2906/sui-agent-pay" data-live="" target="_blank" rel="noopener">
+        <div class="num">12</div>
         <div class="body">
-          <h3>MonGo</h3>
-          <div class="sub">A web application built with TypeScript.</div>
-          <span class="badge">▶ TYPESCRIPT</span>
+          <h3>sui-agent-pay</h3>
+          <div class="sub">An agent-payment project on the Sui blockchain — site coming soon.</div>
+          <span class="badge soon">▶ SOON</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://seesaw-three.vercel.app" data-name="Seesaw" data-desc="A TypeScript web app deployed live on Vercel." data-code="https://github.com/medine2906/Seesaw" data-live="https://seesaw-three.vercel.app" target="_blank" rel="noopener">
-        <div class="num">08</div>
+      <a class="prow" href="https://github.com/medine2906/walrus-archive" data-cat="blockchain" data-name="walrus-archive" data-desc="An archive built on Walrus decentralized storage — site coming soon." data-code="https://github.com/medine2906/walrus-archive" data-live="" target="_blank" rel="noopener">
+        <div class="num">13</div>
         <div class="body">
-          <h3>Seesaw</h3>
-          <div class="sub">A TypeScript web app deployed live on Vercel.</div>
-          <span class="badge live">▶ LIVE DEMO</span>
+          <h3>walrus-archive</h3>
+          <div class="sub">An archive built on Walrus decentralized storage — site coming soon.</div>
+          <span class="badge soon">▶ SOON</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/property-listing-ai-agent" data-name="Property AI Agent" data-desc="An AI agent that works with real-estate property listings." data-code="https://github.com/medine2906/property-listing-ai-agent" data-live="" target="_blank" rel="noopener">
-        <div class="num">09</div>
+      <a class="prow" href="https://github.com/medine2906/deepbook-dashboard" data-cat="blockchain" data-name="deepbook-dashboard" data-desc="A dashboard for Sui DeepBook — site coming soon." data-code="https://github.com/medine2906/deepbook-dashboard" data-live="" target="_blank" rel="noopener">
+        <div class="num">14</div>
         <div class="body">
-          <h3>Property AI Agent</h3>
-          <div class="sub">An AI agent that works with real-estate property listings.</div>
-          <span class="badge">▶ AI AGENT</span>
+          <h3>deepbook-dashboard</h3>
+          <div class="sub">A dashboard for Sui DeepBook — site coming soon.</div>
+          <span class="badge soon">▶ SOON</span>
         </div>
         <div class="go">→</div>
       </a>
 
-      <a class="prow" href="https://github.com/medine2906/PCT_Biosensor_Analiz" data-name="PCT Biosensor" data-desc="A Python tool that computes Rct from EIS data for biosensor analysis." data-code="https://github.com/medine2906/PCT_Biosensor_Analiz" data-live="" target="_blank" rel="noopener">
-        <div class="num">10</div>
+      <a class="prow" href="https://github.com/medine2906/foundry-local-rag-intern" data-cat="ai" data-name="foundry-local-rag-intern" data-desc="A local RAG project from my internship — site coming soon." data-code="https://github.com/medine2906/foundry-local-rag-intern" data-live="" target="_blank" rel="noopener">
+        <div class="num">15</div>
         <div class="body">
-          <h3>PCT Biosensor</h3>
-          <div class="sub">A Python tool that computes Rct from EIS data for biosensor analysis.</div>
-          <span class="badge">▶ PYTHON</span>
+          <h3>Foundry Local RAG</h3>
+          <div class="sub">A local RAG project from my internship — site coming soon.</div>
+          <span class="badge soon">▶ SOON</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/medine2906/sharesforShopp" data-cat="opensource" data-name="sharesforShopp" data-desc="An open-source project I forked and contributed to." data-code="https://github.com/medine2906/sharesforShopp" data-live="" target="_blank" rel="noopener">
+        <div class="num">16</div>
+        <div class="body">
+          <h3>sharesforShopp</h3>
+          <div class="sub">An open-source project I forked and contributed to.</div>
+          <span class="badge fork">▶ OPEN SOURCE</span>
+        </div>
+        <div class="go">→</div>
+      </a>
+
+      <a class="prow" href="https://github.com/arayuzLab/yeniPCT" data-cat="data" data-name="yeniPCT" data-desc="A PCT biosensor analysis project (arayuzLab)." data-code="https://github.com/arayuzLab/yeniPCT" data-live="" target="_blank" rel="noopener">
+        <div class="num">17</div>
+        <div class="body">
+          <h3>yeniPCT</h3>
+          <div class="sub">A PCT biosensor analysis project (arayuzLab).</div>
+          <span class="badge">▶ DATA</span>
         </div>
         <div class="go">→</div>
       </a>
@@ -587,6 +680,23 @@
   document.querySelectorAll('.btn, .prow, nav.dots a, .socials a, .trait, .mail').forEach(function(el){
     el.addEventListener('mouseenter', function(){ SFX.hover(); });
   });
+  /* ---------- project filters ---------- */
+  var rows = document.querySelectorAll('.prow');
+  document.querySelectorAll('#filters .filt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var f = btn.getAttribute('data-f');
+      document.querySelectorAll('#filters .filt').forEach(function(b){ b.classList.toggle('on', b === btn); });
+      rows.forEach(function(r){
+        var show;
+        if(f === 'all')       show = true;
+        else if(f === 'live') show = !!r.getAttribute('data-live');
+        else                  show = (' ' + (r.getAttribute('data-cat') || '') + ' ').indexOf(' ' + f + ' ') !== -1;
+        r.classList.toggle('hide', !show);
+      });
+      SFX.click();
+    });
+  });
+
   /* ---------- live demo modal ---------- */
   var modal   = document.getElementById('demo');
   var mFrame  = document.getElementById('m-frame');
