@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- background -->
+  <rect x="0" y="0" width="16" height="16" fill="#c6f24e"/>
+  <!-- black frame -->
+  <path fill="#141414" d="M0 0h16v2H0zM0 14h16v2H0zM0 0h2v16H0zM14 0h2v16h-2z"/>
+  <!-- left eye ^ -->
+  <rect x="4" y="6" width="1" height="1" fill="#141414"/>
+  <rect x="3" y="7" width="1" height="1" fill="#141414"/>
+  <rect x="5" y="7" width="1" height="1" fill="#141414"/>
+  <!-- right eye ^ -->
+  <rect x="11" y="6" width="1" height="1" fill="#141414"/>
+  <rect x="10" y="7" width="1" height="1" fill="#141414"/>
+  <rect x="12" y="7" width="1" height="1" fill="#141414"/>
+  <!-- smile -->
+  <rect x="5" y="10" width="1" height="1" fill="#141414"/>
+  <rect x="6" y="11" width="1" height="1" fill="#141414"/>
+  <rect x="7" y="11" width="1" height="1" fill="#141414"/>
+  <rect x="8" y="11" width="1" height="1" fill="#141414"/>
+  <rect x="9" y="11" width="1" height="1" fill="#141414"/>
+  <rect x="10" y="10" width="1" height="1" fill="#141414"/>
+</svg>
